@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.bpmn2.modeler.updatesite"
-      label="BPMN2 Editor Updatesite"
+      id="org.eclipse.bpmn2.modeler.updatesite-feature"
+      label="BPMN2 Modeler Updatesite"
       version="0.0.1.qualifier"
       provider-name="Eclipse.org">
 
@@ -19,10 +19,6 @@
 
    <includes
          id="org.eclipse.bpmn2.modeler"
-         version="0.0.0"/>
-
-   <includes
-         id="org.eclipse.bpmn2.feature"
          version="0.0.0"/>
 
 </feature>
