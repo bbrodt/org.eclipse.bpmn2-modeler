@@ -45,7 +45,7 @@ public class ModelUtil {
 	public static String getObjectName(EObject obj) {
 		String name;
 		EStructuralFeature feature = ((EObject)obj).eClass().getEStructuralFeature("bpmnElement");
-		if (feature!=null) {
+		if (feature!=null && obj.eGet(feature)!=null) {
 			EObject bpmnElement = (EObject) obj.eGet(feature);
 			name = obj.eClass().getName() + "_" + bpmnElement.eClass().getName();
 		}
@@ -140,6 +140,8 @@ public class ModelUtil {
 			else {
 				// TODO: what to do here if the BPMN2 element has an "id" attribute which is not set?
 				// should we generate one and set it?
+				// yup
+				setID(obj);
 			}
 		}
 		

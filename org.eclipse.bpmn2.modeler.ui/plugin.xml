@@ -148,4 +148,14 @@
             id="org.eclipse.bpmn2.modeler.ui.ImageProvider">
       </imageProvider>
    </extension>
+   
+   
+   <extension
+         point="org.eclipse.emf.ecore.content_parser">
+      <parser
+            class="org.eclipse.bpmn2.modeler.ui.util.Bpmn2ModelerResourceFactoryImpl"
+            contentTypeIdentifier="org.eclipse.bpmn2.content-type.xml">
+      </parser>
+   </extension>
+   
 </plugin>
