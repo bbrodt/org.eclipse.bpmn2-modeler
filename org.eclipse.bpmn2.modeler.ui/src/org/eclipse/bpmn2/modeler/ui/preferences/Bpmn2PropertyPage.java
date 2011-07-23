@@ -30,6 +30,9 @@ import org.osgi.service.prefs.Preferences;
 
 public class Bpmn2PropertyPage extends PropertyPage {
 
+	public final static String PREFERENCES_ID = "org.eclipse.bpmn2.modeler";
+	public final static String TARGET_RUNTIME_ID = "target.runtime";
+	
 	private Preferences prefs;
 
 	private Combo cboRuntimes;
@@ -75,6 +78,15 @@ public class Bpmn2PropertyPage extends PropertyPage {
 		super.performDefaults();
 		restoreDefaults();
 	}
+	
+	public static void loadPreferences(IProject project) {
+		IEclipsePreferences rootNode = Platform.getPreferencesService()
+				.getRootNode();
+		Preferences prefs = rootNode.node(ProjectScope.SCOPE)
+				.node(project.getName())
+				.node(PREFERENCES_ID);
+		reloadPreferences(prefs);
+	}
 
 	private void initData() {
 
@@ -83,13 +95,13 @@ public class Bpmn2PropertyPage extends PropertyPage {
 				.getRootNode();
 		prefs = rootNode.node(ProjectScope.SCOPE)
 				.node(project.getName())
-				.node("org.eclipse.bpmn2.modeler");
+				.node(PREFERENCES_ID);
 
-		reloadPreferences();
+		reloadPreferences(prefs);
 	}
 
-	private void reloadPreferences() {
-		String id = prefs.get("target.runtime",TargetRuntime.DEFAULT_RUNTIME_ID);
+	private static void reloadPreferences(Preferences prefs) {
+		String id = prefs.get(TARGET_RUNTIME_ID,TargetRuntime.DEFAULT_RUNTIME_ID);
 		TargetRuntime.setRuntime(id);
 	}
 
@@ -111,6 +123,7 @@ public class Bpmn2PropertyPage extends PropertyPage {
 	private void updateData() throws BackingStoreException {
 		int i = cboRuntimes.getSelectionIndex();
 		TargetRuntime rt = TargetRuntime.getAllRuntimes()[i];
-		prefs.put("target.runtime",rt.getId());
+		prefs.put(TARGET_RUNTIME_ID,rt.getId());
+		prefs.flush();
 	}
 }

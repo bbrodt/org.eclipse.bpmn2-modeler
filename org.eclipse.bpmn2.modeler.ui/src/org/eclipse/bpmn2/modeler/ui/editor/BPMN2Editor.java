@@ -19,6 +19,7 @@ import org.eclipse.bpmn2.modeler.core.TargetRuntime;
 import org.eclipse.bpmn2.modeler.core.di.DIImport;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.modeler.ui.Activator;
+import org.eclipse.bpmn2.modeler.ui.preferences.Bpmn2PropertyPage;
 import org.eclipse.bpmn2.modeler.ui.util.ErrorUtils;
 import org.eclipse.bpmn2.modeler.ui.wizards.BPMN2DiagramCreator;
 import org.eclipse.bpmn2.util.Bpmn2ResourceImpl;
@@ -87,11 +88,13 @@ public class BPMN2Editor extends DiagramEditor {
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
-		TargetRuntime.getAllRuntimes();
 		
 		try {
 			if (input instanceof IFileEditorInput) {
 				modelFile = ((IFileEditorInput) input).getFile();
+				
+				loadPreferences(modelFile.getProject());
+				
 				input = createNewDiagramEditorInput();
 
 			} else if (input instanceof DiagramEditorInput) {
@@ -111,6 +114,10 @@ public class BPMN2Editor extends DiagramEditor {
 		super.init(site, input);
 	}
 
+	private void loadPreferences(IProject project) {
+		Bpmn2PropertyPage.loadPreferences(project);
+	}
+	
 	private void getModelPathFromInput(DiagramEditorInput input) {
 		URI uri = input.getDiagram().eResource().getURI();
 		String uriString = uri.trimFragment().toPlatformString(true);
