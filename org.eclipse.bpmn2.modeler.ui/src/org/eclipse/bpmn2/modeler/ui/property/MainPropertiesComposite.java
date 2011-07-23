@@ -19,7 +19,7 @@ import org.eclipse.bpmn2.GatewayDirection;
 import org.eclipse.bpmn2.Participant;
 import org.eclipse.bpmn2.di.BPMNShape;
 import org.eclipse.bpmn2.di.BpmnDiPackage;
-import org.eclipse.bpmn2.modeler.core.Bpmn2Preferences;
+import org.eclipse.bpmn2.modeler.core.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.core.ModelHandler;
 import org.eclipse.bpmn2.modeler.core.ModelHandlerLocator;
 import org.eclipse.bpmn2.modeler.ui.Activator;
@@ -82,7 +82,7 @@ public class MainPropertiesComposite extends AbstractBpmn2PropertiesComposite {
 				ItemProviderAdapter.class);
 
 		EList<EAttribute> eAllAttributes = be.eClass().getEAllAttributes();
-		Bpmn2Preferences preferences = Bpmn2Preferences.getPreferences(project);
+		ToolEnablementPreferences preferences = ToolEnablementPreferences.getPreferences(project);
 
 		for (EAttribute a : eAllAttributes) {
 

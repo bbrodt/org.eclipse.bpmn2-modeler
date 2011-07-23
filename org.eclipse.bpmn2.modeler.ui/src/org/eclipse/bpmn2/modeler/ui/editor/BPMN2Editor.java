@@ -15,6 +15,7 @@ import java.io.IOException;
 import org.eclipse.bpmn2.modeler.core.ModelHandler;
 import org.eclipse.bpmn2.modeler.core.ModelHandlerLocator;
 import org.eclipse.bpmn2.modeler.core.ProxyURIConverterImplExtension;
+import org.eclipse.bpmn2.modeler.core.TargetRuntime;
 import org.eclipse.bpmn2.modeler.core.di.DIImport;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.modeler.ui.Activator;
@@ -43,6 +44,7 @@ import org.eclipse.emf.transaction.TransactionalCommandStack;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.emf.transaction.TransactionalEditingDomain.Lifecycle;
 import org.eclipse.emf.transaction.impl.TransactionalEditingDomainImpl;
+import org.eclipse.graphiti.tb.IToolBehaviorProvider;
 import org.eclipse.graphiti.ui.editor.DiagramEditor;
 import org.eclipse.graphiti.ui.editor.DiagramEditorInput;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -68,7 +70,8 @@ import org.eclipse.ui.application.WorkbenchAdvisor;
 @SuppressWarnings("restriction")
 public class BPMN2Editor extends DiagramEditor {
 
-	public static String EDITOR_ID = "org.eclipse.bpmn2.modeler.ui.bpmn2editor";
+	public static final String EDITOR_ID = "org.eclipse.bpmn2.modeler.ui.bpmn2editor";
+	public static final String CONTRIBUTOR_ID = "org.eclipse.bpmn2.modeler.ui.PropertyContributor";
 
 	private ModelHandler modelHandler;
 	private URI modelUri;
@@ -84,6 +87,8 @@ public class BPMN2Editor extends DiagramEditor {
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		TargetRuntime.getAllRuntimes();
+		
 		try {
 			if (input instanceof IFileEditorInput) {
 				modelFile = ((IFileEditorInput) input).getFile();
@@ -176,6 +181,16 @@ public class BPMN2Editor extends DiagramEditor {
 			});
 		}
 		basicCommandStack.saveIsDone();
+	}
+
+	/**
+	 * ID for tabbed property sheets.
+	 * 
+	 * @return the contributor id
+	 */
+	@Override
+	public String getContributorId() {
+		return CONTRIBUTOR_ID;
 	}
 
 	private void importDiagram() {

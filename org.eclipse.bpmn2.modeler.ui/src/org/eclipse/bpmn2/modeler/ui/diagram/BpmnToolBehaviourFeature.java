@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.bpmn2.modeler.core.Activator;
-import org.eclipse.bpmn2.modeler.core.Bpmn2Preferences;
+import org.eclipse.bpmn2.modeler.core.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.core.features.activity.ActivitySelectionBehavior;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.extension.ICustomTaskEditor;
 import org.eclipse.bpmn2.modeler.core.features.event.EventSelectionBehavior;
@@ -69,7 +69,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 			}
 		}
 
-		Bpmn2Preferences pref = Bpmn2Preferences.getPreferences(project);
+		ToolEnablementPreferences pref = ToolEnablementPreferences.getPreferences(project);
 
 		List<IPaletteCompartmentEntry> ret = new ArrayList<IPaletteCompartmentEntry>();
 
@@ -91,7 +91,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 		return ret.toArray(new IPaletteCompartmentEntry[ret.size()]);
 	}
 
-	private void createEventsCompartments(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createEventsCompartments(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry = new PaletteCompartmentEntry("Events", null);
 		ret.add(compartmentEntry);
@@ -99,7 +99,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 		createEntries(pref, FeatureMap.EVENTS, compartmentEntry, featureProvider);
 	}
 
-	private void createOtherCompartments(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createOtherCompartments(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry = new PaletteCompartmentEntry("Other", null);
 		compartmentEntry.setInitiallyOpen(false);
@@ -109,7 +109,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 
 	}
 
-	private void createDataCompartments(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createDataCompartments(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry = new PaletteCompartmentEntry("Data Items", null);
 		compartmentEntry.setInitiallyOpen(false);
@@ -119,7 +119,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 
 	}
 
-	private void createEventDefinitionsCompartments(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createEventDefinitionsCompartments(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry = new PaletteCompartmentEntry("Event Definitions", null);
 		compartmentEntry.setInitiallyOpen(false);
@@ -129,7 +129,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 
 	}
 
-	private void createGatewaysCompartments(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createGatewaysCompartments(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry = new PaletteCompartmentEntry("Gateways", null);
 		ret.add(compartmentEntry);
@@ -138,7 +138,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 
 	}
 
-	private void createTasksCompartments(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createTasksCompartments(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry = new PaletteCompartmentEntry("Tasks", null);
 		ret.add(compartmentEntry);
@@ -147,7 +147,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 
 	}
 
-	private void createConnectors(Bpmn2Preferences pref, List<IPaletteCompartmentEntry> ret,
+	private void createConnectors(ToolEnablementPreferences pref, List<IPaletteCompartmentEntry> ret,
 			IFeatureProvider featureProvider) {
 		PaletteCompartmentEntry compartmentEntry;
 		compartmentEntry = new PaletteCompartmentEntry("Connectors", null);
@@ -165,7 +165,7 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 		}
 	}
 
-	private void createEntries(Bpmn2Preferences pref, List<Class<? extends IFeature>> neededEntries,
+	private void createEntries(ToolEnablementPreferences pref, List<Class<? extends IFeature>> neededEntries,
 			PaletteCompartmentEntry compartmentEntry, IFeatureProvider featureProvider) {
 		List<ICreateFeature> tools = Arrays.asList(featureProvider.getCreateFeatures());
 

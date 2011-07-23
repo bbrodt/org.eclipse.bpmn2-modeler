@@ -8,7 +8,7 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.eclipse.bpmn2.modeler.ui.property;
+package org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.property;
 
 import java.util.ArrayList;
 import java.util.Collections;

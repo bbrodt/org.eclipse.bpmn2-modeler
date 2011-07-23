@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.bpmn2.modeler.custom_task">
+      <task
+            createFeature="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.task.EmailTaskFeatureContainer"
+            id="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.EmailTask"
+            name="Email Task"
+            taskName="send">
+      </task>
+      <task
+            createFeature="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.task.LogTaskFeatureContainer"
+            id="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.LogTask"
+            name="Log Task"
+            taskName="log">
+      </task>
+   </extension>
+
+	<extension point="org.eclipse.bpmn2.modeler.runtime">
+		<runtime
+		  name="JBoss jBPM5 Business Process Engine"
+		  versions="5.1,5.2,5.3"
+		  id="org.jboss.runtime.jbpm5"
+		  description="BPMN2 Modeler customizations for the JBoss jBPM5 engine">
+		</runtime>
+		
+		<emfResourceFactory
+		  runtimeId="org.jboss.runtime.jbpm5"
+		  class="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.JBPM5ResourceFactoryImpl">
+		</emfResourceFactory>
+
+         <propertyTab
+               afterTab="org.eclipse.bpmn2.modeler.advanced.tab"
+               category="BPMN2"
+               id="bpmn2.jbpm.tab"
+		       runtimeId="org.jboss.runtime.jbpm5"
+               label="jBPM">
+         </propertyTab>
+         
+		<propertySection
+               class="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.property.JbpmPropertySection"
+               filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
+               id="bpmn2.jbpm.tab.section"
+		       runtimeId="org.jboss.runtime.jbpm5"
+               tab="bpmn2.jbpm.tab">
+         </propertySection>
+
+	</extension>
+</plugin>

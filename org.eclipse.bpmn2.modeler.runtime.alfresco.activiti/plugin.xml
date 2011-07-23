@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension point="org.eclipse.bpmn2.modeler.runtime">
+		<runtime
+		  name="Alfresco Activiti Business Process Engine"
+		  versions="5.1,5.2,5.3"
+		  id="org.alfresco.runtime.activiti"
+		  description="BPMN2 Modeler customizations for the Alfresco Activiti engine"
+		/>
+		<emfResourceFactory
+		  runtimeId="org.alfresco.runtime.activiti"
+		  class="org.eclipse.bpmn2.modeler.runtime.alfresco.activiti.ActivitiResourceFactoryImpl"
+		/>
+
+	</extension>
+</plugin>

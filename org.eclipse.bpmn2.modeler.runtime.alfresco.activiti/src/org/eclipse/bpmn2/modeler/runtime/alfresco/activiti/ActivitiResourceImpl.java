@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.bpmn2.modeler.ui.util;
+package org.eclipse.bpmn2.modeler.runtime.alfresco.activiti;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -42,13 +42,13 @@ import org.xml.sax.helpers.DefaultHandler;
  * @see org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl
  * @generated
  */
-public class Bpmn2ModelerResourceImpl extends Bpmn2ResourceImpl {
+public class ActivitiResourceImpl extends Bpmn2ResourceImpl {
 
     /**
      * Creates an instance of the resource.
      * @param uri the URI of the new resource.
      */
-    public Bpmn2ModelerResourceImpl(URI uri) {
+    public ActivitiResourceImpl(URI uri) {
         super(uri);
     }
 
@@ -145,7 +145,7 @@ public class Bpmn2ModelerResourceImpl extends Bpmn2ResourceImpl {
      */
     protected static class Bpmn2ModelerXmlHelper extends BpmnXmlHelper {
 
-        public Bpmn2ModelerXmlHelper(Bpmn2ModelerResourceImpl resource) {
+        public Bpmn2ModelerXmlHelper(ActivitiResourceImpl resource) {
             super(resource);
         }
     }

@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.bpmn2.modeler.ui.util;
+package org.eclipse.bpmn2.modeler.runtime.alfresco.activiti;
 
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Definitions;
@@ -31,14 +31,14 @@ import org.eclipse.emf.ecore.xmi.impl.ElementHandlerImpl;
  * which enhances the base Resource by adding ID lookup to sourceRef and targetRef object references. 
  * @see org.eclipse.bpmn2.util.Bpmn2ResourceImpl
  */
-public class Bpmn2ModelerResourceFactoryImpl extends ResourceFactoryImpl {
+public class ActivitiResourceFactoryImpl extends ResourceFactoryImpl {
     /**
      * Creates an instance of the resource factory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    public Bpmn2ModelerResourceFactoryImpl() {
+    public ActivitiResourceFactoryImpl() {
         super();
     }
 
@@ -50,7 +50,7 @@ public class Bpmn2ModelerResourceFactoryImpl extends ResourceFactoryImpl {
      */
     @Override
     public Resource createResource(URI uri) {
-        Bpmn2ModelerResourceImpl result = new Bpmn2ModelerResourceImpl(uri);
+        ActivitiResourceImpl result = new ActivitiResourceImpl(uri);
         ExtendedMetaData extendedMetadata = new XmlExtendedMetadata();
         result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
         result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);

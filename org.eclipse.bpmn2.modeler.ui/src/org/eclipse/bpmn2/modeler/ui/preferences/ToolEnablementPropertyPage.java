@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.bpmn2.modeler.core.Bpmn2Preferences;
+import org.eclipse.bpmn2.modeler.core.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.core.ToolEnablement;
 import org.eclipse.bpmn2.modeler.ui.Activator;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -47,7 +47,7 @@ public class ToolEnablementPropertyPage extends PropertyPage {
 
 	private DataBindingContext m_bindingContext;
 
-	private Bpmn2Preferences preferences;
+	private ToolEnablementPreferences preferences;
 	private final List<ToolEnablement> tools = new ArrayList<ToolEnablement>();
 	private Object[] toolsEnabled;
 	private CheckboxTreeViewer checkboxTreeViewer;
@@ -58,7 +58,7 @@ public class ToolEnablementPropertyPage extends PropertyPage {
 	 * Create the property page.
 	 */
 	public ToolEnablementPropertyPage() {
-		setTitle("BPMN2");
+		setTitle("Tool Enablement");
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class ToolEnablementPropertyPage extends PropertyPage {
 	}
 
 	private void initData() {
-		preferences = Bpmn2Preferences.getPreferences((IProject) getElement().getAdapter(IProject.class));
+		preferences = ToolEnablementPreferences.getPreferences((IProject) getElement().getAdapter(IProject.class));
 
 		reloadPreferences();
 	}

@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.bpmn2.BaseElement;
-import org.eclipse.bpmn2.modeler.core.Bpmn2Preferences;
+import org.eclipse.bpmn2.modeler.core.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.modeler.ui.editor.BPMN2Editor;
 import org.eclipse.bpmn2.provider.Bpmn2ItemProviderAdapterFactory;
@@ -69,7 +69,7 @@ public class ImprovedAdvancedPropertiesComposite extends Composite {
 	private TabbedPropertySheetPage aTabbedPropertySheetPage;
 	private BPMN2Editor diagramEditor;
 	private final MainPropertiesComposite mainPropertiesComposite;
-	private Bpmn2Preferences prefs;
+	private ToolEnablementPreferences prefs;
 	private TransactionalEditingDomain domain;
 	private DomainListener domainListener;
 
@@ -159,7 +159,7 @@ public class ImprovedAdvancedPropertiesComposite extends Composite {
 		domain.addResourceSetListener(domainListener);
 
 		treeViewer.setInput(be);
-		prefs = Bpmn2Preferences.getPreferences(diagramEditor.getModelFile().getProject());
+		prefs = ToolEnablementPreferences.getPreferences(diagramEditor.getModelFile().getProject());
 	}
 
 	public void setSheetPage(TabbedPropertySheetPage aTabbedPropertySheetPage) {

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-   <extension-point id="org.eclipse.bpmn2.modeler.custom_task" name="Custom Task" schema="schema/org.eclipse.bpmn2.modeler.exsd"/>
+   <extension-point id="org.eclipse.bpmn2.modeler.custom_task" name="Custom Task" schema="schema/org.eclipse.bpmn2.modeler.custom_task.exsd"/>
+   <extension-point id="org.eclipse.bpmn2.modeler.runtime" name="BPMN2 Modeler Runtime Specialization" schema="schema/org.eclipse.bpmn2.modeler.runtime.exsd"/>
    
    <extension
          point="org.eclipse.emf.validation.constraintProviders">
