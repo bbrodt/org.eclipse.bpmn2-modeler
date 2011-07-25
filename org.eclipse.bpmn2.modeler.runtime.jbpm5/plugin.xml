@@ -22,6 +22,7 @@
 		  name="JBoss jBPM5 Business Process Engine"
 		  versions="5.1,5.2,5.3"
 		  id="org.jboss.runtime.jbpm5"
+		  class="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.JBPM5RuntimeExtension"
 		  description="BPMN2 Modeler customizations for the JBoss jBPM5 engine">
 		</runtime>
 		

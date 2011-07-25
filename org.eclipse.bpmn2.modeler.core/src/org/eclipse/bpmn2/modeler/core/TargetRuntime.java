@@ -3,9 +3,12 @@ package org.eclipse.bpmn2.modeler.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceImpl;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.AbstractSectionDescriptor;
@@ -31,6 +34,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	protected String[] versions;
 	protected String id;
 	protected String description;
+	protected IBpmn2RuntimeExtension runtimeExtension;
 	protected ResourceFactoryImpl emfResourceFactory;
 	protected ArrayList<Bpmn2TabDescriptor> tabDescriptors;
 	protected ArrayList<Bpmn2SectionDescriptor> sectionDescriptors;
@@ -45,18 +49,41 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	
 	public static TargetRuntime getRuntime(String id) {
 		getAllRuntimes();
-		for (TargetRuntime rt : targetRuntimes) {
+		for (TargetRuntime rt : getAllRuntimes()) {
 			if (rt.id.equals(id))
 				return rt;
 		}
 		return null;
 	}
-	
-	public static TargetRuntime getRuntime() {
-		if (currentRuntime==null) {
-			currentRuntime = getRuntime(DEFAULT_RUNTIME_ID);
+
+	/**
+	 * If the project has not been configured for a specific runtime through the "BPMN2"
+	 * project properties page (i.e. the target is "None") then allow the runtime extension
+	 * plug-ins an opportunity to identify the given process file contents as their own.
+	 * 
+	 * If none of the plug-ins respond with "yes, this file is targeted for my runtime",
+	 * then use the "None" as the extension. This will configure the BPMN2 Modeler with
+	 * generic property sheets and other default behavior.
+	 * 
+	 * @param file
+	 * @return
+	 */
+	public static TargetRuntime getRuntime(IFile file) {
+		getAllRuntimes();
+		if (currentRuntime == getDefaultRuntime()) {
+			for (TargetRuntime rt : targetRuntimes) {
+				if (rt.runtimeExtension.isContentForRuntime(file)) {
+					return rt;
+				}
+			}
 		}
-		return currentRuntime;
+		else
+			return currentRuntime;
+		return getDefaultRuntime();
+	}
+	
+	public static TargetRuntime getDefaultRuntime() {
+		return getRuntime(DEFAULT_RUNTIME_ID);
 	}
 	
 	public static void setRuntime(TargetRuntime rt) {
@@ -67,6 +94,11 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		currentRuntime = getRuntime(id);
 		if (currentRuntime==null)
 			currentRuntime = getRuntime(DEFAULT_RUNTIME_ID);
+	}
+
+	public void setResourceSet(ResourceSet resourceSet) {
+		resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap().put(
+				Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID, emfResourceFactory);
 	}
 	
 	public static TargetRuntime[] getAllRuntimes() {
@@ -85,6 +117,8 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 						String versions = e.getAttribute("versions");
 						String description = e.getAttribute("description");
 						TargetRuntime rt = new TargetRuntime(id,name,versions,description);
+						
+						rt.runtimeExtension = (IBpmn2RuntimeExtension) e.createExecutableExtension("class");
 					
 						rtList.add(rt);
 					}
@@ -187,6 +221,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	
 	private static void addAfterTab(ArrayList<Bpmn2TabDescriptor> list, Bpmn2TabDescriptor tab) {
 		
+		getAllRuntimes();
 		String afterTab = tab.getAfterTab();
 		if (afterTab!=null && !afterTab.isEmpty() && !afterTab.equals("top")) {
 			for (TargetRuntime rt : targetRuntimes) {
@@ -227,6 +262,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	
 	private static void addAfterSection(ArrayList<Bpmn2SectionDescriptor> list, Bpmn2SectionDescriptor section) {
 		
+		getAllRuntimes();
 		String afterSection = section.getAfterSection();
 		if (afterSection!=null) {
 			for (TargetRuntime rt : targetRuntimes) {

@@ -57,7 +57,7 @@ public class Bpmn2PropertyPage extends PropertyPage {
 		cboRuntimes = new Combo(container, SWT.NONE);
 		cboRuntimes.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
 		
-		TargetRuntime cr = TargetRuntime.getRuntime();
+		TargetRuntime cr = TargetRuntime.getDefaultRuntime();
 		int i = 0;
 		for (TargetRuntime r : TargetRuntime.getAllRuntimes()) {
 			cboRuntimes.add(r.getName());

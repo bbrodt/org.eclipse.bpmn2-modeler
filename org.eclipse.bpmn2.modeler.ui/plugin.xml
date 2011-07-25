@@ -14,7 +14,7 @@
 	<extension point="org.eclipse.ui.editors">
 		<editor class="org.eclipse.bpmn2.modeler.ui.editor.BPMN2Editor"
 			contributorClass="org.eclipse.graphiti.ui.editor.DiagramEditorActionBarContributor"
-			default="true" extensions="bpmn2" icon="icons/bpmn2_editor_16.png"
+			default="true" extensions="bpmn,bpmn2" icon="icons/bpmn2_editor_16.png"
 			id="org.eclipse.bpmn2.modeler.ui.bpmn2editor" name="BPMN2 Visual Editor">
 			<contentTypeBinding contentTypeId="org.eclipse.bpmn2.content-type.xml">
 			</contentTypeBinding>
@@ -56,7 +56,6 @@
 	<extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
 		<propertyContributor
 			contributorId="org.eclipse.bpmn2.modeler.ui.PropertyContributor"
-			sectionDescriptorProvider="org.eclipse.bpmn2.modeler.ui.property.PropertySectionDescriptorProvider"
 			tabDescriptorProvider="org.eclipse.bpmn2.modeler.ui.property.PropertyTabDescriptorProvider">
 			<propertyCategory category="BPMN2">
 			</propertyCategory>
@@ -92,8 +91,11 @@
 	<!-- Provide a default "runtime" behavior -->
 
 	<extension point="org.eclipse.bpmn2.modeler.runtime">
-		<runtime name="None" id="org.eclipse.bpmn2.modeler.runtime.none"
-			description="Default runtime definition">
+		<runtime
+        class="org.eclipse.bpmn2.modeler.ui.DefaultBpmn2RuntimeExtension"
+        description="Default runtime definition"
+        id="org.eclipse.bpmn2.modeler.runtime.none"
+        name="None">
 		</runtime>
 
 		<emfResourceFactory runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
@@ -117,6 +119,15 @@
 			class="org.eclipse.bpmn2.modeler.ui.property.Bpmn2MainPropertySection"
 			filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
 			id="org.eclipse.bpmn2.modeler.main.tab.section"
+			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
+			tab="org.eclipse.bpmn2.modeler.main.tab">
+		</propertySection>
+
+		<propertySection
+			class="org.eclipse.bpmn2.modeler.ui.property.AdvancedPropertySection"
+			filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
+			id="org.eclipse.bpmn2.modeler.main.tab.section2"
+			afterSection="org.eclipse.bpmn2.modeler.main.tab.section"
 			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
 			tab="org.eclipse.bpmn2.modeler.main.tab">
 		</propertySection>

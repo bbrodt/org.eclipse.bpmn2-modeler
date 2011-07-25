@@ -17,8 +17,10 @@ import org.eclipse.bpmn2.modeler.core.ModelHandlerLocator;
 import org.eclipse.bpmn2.modeler.core.ProxyURIConverterImplExtension;
 import org.eclipse.bpmn2.modeler.core.TargetRuntime;
 import org.eclipse.bpmn2.modeler.core.di.DIImport;
+import org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceImpl;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.modeler.ui.Activator;
+import org.eclipse.bpmn2.modeler.ui.BPMN2ContentDescriber;
 import org.eclipse.bpmn2.modeler.ui.preferences.Bpmn2PropertyPage;
 import org.eclipse.bpmn2.modeler.ui.util.ErrorUtils;
 import org.eclipse.bpmn2.modeler.ui.wizards.BPMN2DiagramCreator;
@@ -85,6 +87,8 @@ public class BPMN2Editor extends DiagramEditor {
 	private boolean workbenchShutdown = false;
 	
 	private BPMN2EditingDomainListener editingDomainListener;
+	
+	private TargetRuntime targetRuntime;
 
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
@@ -94,6 +98,9 @@ public class BPMN2Editor extends DiagramEditor {
 				modelFile = ((IFileEditorInput) input).getFile();
 				
 				loadPreferences(modelFile.getProject());
+				
+				// initialize the target runtime environment
+				getTargetRuntime();
 				
 				input = createNewDiagramEditorInput();
 
@@ -161,8 +168,10 @@ public class BPMN2Editor extends DiagramEditor {
 
 		if (input instanceof DiagramEditorInput) {
 			ResourceSet resourceSet = getEditingDomain().getResourceSet();
+			targetRuntime.setResourceSet(resourceSet);
+			
 			Bpmn2ResourceImpl bpmnResource = (Bpmn2ResourceImpl) resourceSet.createResource(modelUri,
-					"org.eclipse.bpmn2.content-type.xml");
+					Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID);
 
 			resourceSet.setURIConverter(new ProxyURIConverterImplExtension());
 
@@ -200,6 +209,15 @@ public class BPMN2Editor extends DiagramEditor {
 		return CONTRIBUTOR_ID;
 	}
 
+	public TargetRuntime getTargetRuntime() {
+		if (targetRuntime==null) {
+			if (modelFile==null)
+				return TargetRuntime.getDefaultRuntime();
+			targetRuntime = TargetRuntime.getRuntime(modelFile);
+		}
+		return targetRuntime;
+	}
+	
 	private void importDiagram() {
 		DIImport di = new DIImport();
 		di.setDiagram(getDiagramTypeProvider().getDiagram());

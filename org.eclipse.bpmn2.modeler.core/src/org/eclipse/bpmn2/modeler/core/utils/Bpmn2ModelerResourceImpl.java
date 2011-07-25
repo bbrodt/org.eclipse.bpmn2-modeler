@@ -30,9 +30,10 @@ import org.eclipse.emf.ecore.resource.Resource;
  * @implements Bpmn2Resource
  * <!-- end-user-doc -->
  * @see org.eclipse.bpmn2.util.Bpmn2ResourceFactoryImpl
- * @generated
  */
 public class Bpmn2ModelerResourceImpl extends Bpmn2ResourceImpl {
+
+	public static final String BPMN2_CONTENT_TYPE_ID = "org.eclipse.bpmn2.content-type.xml";
 
     /**
      * Creates an instance of the resource.
