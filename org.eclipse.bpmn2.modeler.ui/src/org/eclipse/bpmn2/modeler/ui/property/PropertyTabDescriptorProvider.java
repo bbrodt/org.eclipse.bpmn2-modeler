@@ -2,8 +2,8 @@ package org.eclipse.bpmn2.modeler.ui.property;
 
 import java.util.List;
 
-import org.eclipse.bpmn2.modeler.core.TargetRuntime;
-import org.eclipse.bpmn2.modeler.core.TargetRuntime.Bpmn2TabDescriptor;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.Bpmn2TabDescriptor;
 import org.eclipse.bpmn2.modeler.ui.editor.BPMN2Editor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchPart;

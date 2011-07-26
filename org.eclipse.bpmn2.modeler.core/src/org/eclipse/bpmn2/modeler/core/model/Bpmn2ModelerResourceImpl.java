@@ -12,11 +12,12 @@
  * 
  * </copyright>
  */
-package org.eclipse.bpmn2.modeler.core.utils;
+package org.eclipse.bpmn2.modeler.core.model;
 
 import java.util.Iterator;
 
 import org.eclipse.bpmn2.Definitions;
+import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.util.Bpmn2ResourceImpl;
 import org.eclipse.bpmn2.util.ImportHelper;
 import org.eclipse.emf.common.util.URI;

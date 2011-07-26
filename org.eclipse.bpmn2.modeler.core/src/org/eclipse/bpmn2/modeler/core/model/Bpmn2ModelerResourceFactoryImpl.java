@@ -12,7 +12,7 @@
  * 
  * </copyright>
  */
-package org.eclipse.bpmn2.modeler.core.utils;
+package org.eclipse.bpmn2.modeler.core.model;
 
 import org.eclipse.bpmn2.Bpmn2Factory;
 import org.eclipse.bpmn2.Definitions;

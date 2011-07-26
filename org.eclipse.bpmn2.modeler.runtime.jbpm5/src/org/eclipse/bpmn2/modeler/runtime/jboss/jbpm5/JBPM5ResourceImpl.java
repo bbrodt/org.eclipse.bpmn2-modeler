@@ -16,7 +16,7 @@ package org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5;
 
 import java.util.Map;
 
-import org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceImpl;
+import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;

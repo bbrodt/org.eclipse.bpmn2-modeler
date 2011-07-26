@@ -1,10 +1,12 @@
-package org.eclipse.bpmn2.modeler.core;
+package org.eclipse.bpmn2.modeler.core.preferences;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceImpl;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.bpmn2.modeler.core.AbstractPropertyChangeListenerProvider;
+import org.eclipse.bpmn2.modeler.core.Activator;
+import org.eclipse.bpmn2.modeler.core.IBpmn2RuntimeExtension;
+import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
@@ -28,7 +30,6 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	
 	// our cached registry of target runtimes contributed by other plugins
 	protected static TargetRuntime targetRuntimes[];
-	protected static TargetRuntime currentRuntime;
 	
 	protected String name;
 	protected String[] versions;
@@ -55,46 +56,20 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		}
 		return null;
 	}
-
-	/**
-	 * If the project has not been configured for a specific runtime through the "BPMN2"
-	 * project properties page (i.e. the target is "None") then allow the runtime extension
-	 * plug-ins an opportunity to identify the given process file contents as their own.
-	 * 
-	 * If none of the plug-ins respond with "yes, this file is targeted for my runtime",
-	 * then use the "None" as the extension. This will configure the BPMN2 Modeler with
-	 * generic property sheets and other default behavior.
-	 * 
-	 * @param file
-	 * @return
-	 */
-	public static TargetRuntime getRuntime(IFile file) {
-		getAllRuntimes();
-		if (currentRuntime == getDefaultRuntime()) {
-			for (TargetRuntime rt : targetRuntimes) {
-				if (rt.runtimeExtension.isContentForRuntime(file)) {
-					return rt;
-				}
-			}
-		}
-		else
-			return currentRuntime;
-		return getDefaultRuntime();
-	}
 	
 	public static TargetRuntime getDefaultRuntime() {
 		return getRuntime(DEFAULT_RUNTIME_ID);
 	}
 	
-	public static void setRuntime(TargetRuntime rt) {
-		currentRuntime = rt;
-	}
+//	public static void setRuntime(TargetRuntime rt) {
+//		currentRuntime = rt;
+//	}
 	
-	public static void setRuntime(String id) {
-		currentRuntime = getRuntime(id);
-		if (currentRuntime==null)
-			currentRuntime = getRuntime(DEFAULT_RUNTIME_ID);
-	}
+//	public static void setRuntime(String id) {
+//		currentRuntime = getRuntime(id);
+//		if (currentRuntime==null)
+//			currentRuntime = getRuntime(DEFAULT_RUNTIME_ID);
+//	}
 
 	public void setResourceSet(ResourceSet resourceSet) {
 		resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap().put(

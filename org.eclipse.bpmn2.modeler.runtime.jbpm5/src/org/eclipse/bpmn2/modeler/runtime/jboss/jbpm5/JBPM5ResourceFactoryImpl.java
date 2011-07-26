@@ -14,7 +14,7 @@
  */
 package org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5;
 
-import org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceFactoryImpl;
+import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceFactoryImpl;
 import org.eclipse.bpmn2.util.OnlyContainmentTypeInfo;
 import org.eclipse.bpmn2.util.XmlExtendedMetadata;
 import org.eclipse.emf.common.util.URI;

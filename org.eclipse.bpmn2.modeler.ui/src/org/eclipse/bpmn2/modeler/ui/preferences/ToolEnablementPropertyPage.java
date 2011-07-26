@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.bpmn2.modeler.core.ToolEnablementPreferences;
-import org.eclipse.bpmn2.modeler.core.ToolEnablement;
+import org.eclipse.bpmn2.modeler.core.preferences.ToolEnablement;
+import org.eclipse.bpmn2.modeler.core.preferences.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.ui.Activator;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.observable.list.WritableList;

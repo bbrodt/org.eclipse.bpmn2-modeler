@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.modeler.core.ToolEnablementPreferences;
+import org.eclipse.bpmn2.modeler.core.preferences.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.ui.property.AbstractBpmn2PropertiesComposite;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.emf.common.util.EList;

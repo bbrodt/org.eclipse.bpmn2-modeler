@@ -15,9 +15,10 @@ import java.io.IOException;
 import org.eclipse.bpmn2.modeler.core.ModelHandler;
 import org.eclipse.bpmn2.modeler.core.ModelHandlerLocator;
 import org.eclipse.bpmn2.modeler.core.ProxyURIConverterImplExtension;
-import org.eclipse.bpmn2.modeler.core.TargetRuntime;
 import org.eclipse.bpmn2.modeler.core.di.DIImport;
-import org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceImpl;
+import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
+import org.eclipse.bpmn2.modeler.core.preferences.Bpmn2Preferences;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime;
 import org.eclipse.bpmn2.modeler.core.utils.ModelUtil;
 import org.eclipse.bpmn2.modeler.ui.Activator;
 import org.eclipse.bpmn2.modeler.ui.BPMN2ContentDescriber;
@@ -88,6 +89,7 @@ public class BPMN2Editor extends DiagramEditor {
 	
 	private BPMN2EditingDomainListener editingDomainListener;
 	
+	private Bpmn2Preferences preferences;
 	private TargetRuntime targetRuntime;
 
 	@Override
@@ -96,16 +98,13 @@ public class BPMN2Editor extends DiagramEditor {
 		try {
 			if (input instanceof IFileEditorInput) {
 				modelFile = ((IFileEditorInput) input).getFile();
-				
 				loadPreferences(modelFile.getProject());
-				
-				// initialize the target runtime environment
-				getTargetRuntime();
-				
+
 				input = createNewDiagramEditorInput();
 
 			} else if (input instanceof DiagramEditorInput) {
 				getModelPathFromInput((DiagramEditorInput) input);
+				loadPreferences(modelFile.getProject());
 
 				// This was incorrectly constructed input, we ditch the old one and make a new and clean one instead
 				input = createNewDiagramEditorInput();
@@ -121,8 +120,34 @@ public class BPMN2Editor extends DiagramEditor {
 		super.init(site, input);
 	}
 
+	public Bpmn2Preferences getPreferences() {
+		if (preferences==null) {
+			assert(modelFile!=null);
+			IProject project = modelFile.getProject();
+			loadPreferences(project);
+		}
+		return preferences;
+	}
+	
 	private void loadPreferences(IProject project) {
-		Bpmn2PropertyPage.loadPreferences(project);
+		preferences = new Bpmn2Preferences(project);
+		preferences.load();
+	}
+
+	/**
+	 * ID for tabbed property sheets.
+	 * 
+	 * @return the contributor id
+	 */
+	@Override
+	public String getContributorId() {
+		return CONTRIBUTOR_ID;
+	}
+
+	public TargetRuntime getTargetRuntime() {
+		if (targetRuntime==null)
+			targetRuntime = getPreferences().getRuntime(modelFile);
+		return targetRuntime;
 	}
 	
 	private void getModelPathFromInput(DiagramEditorInput input) {
@@ -168,7 +193,7 @@ public class BPMN2Editor extends DiagramEditor {
 
 		if (input instanceof DiagramEditorInput) {
 			ResourceSet resourceSet = getEditingDomain().getResourceSet();
-			targetRuntime.setResourceSet(resourceSet);
+			getTargetRuntime().setResourceSet(resourceSet);
 			
 			Bpmn2ResourceImpl bpmnResource = (Bpmn2ResourceImpl) resourceSet.createResource(modelUri,
 					Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID);
@@ -197,25 +222,6 @@ public class BPMN2Editor extends DiagramEditor {
 			});
 		}
 		basicCommandStack.saveIsDone();
-	}
-
-	/**
-	 * ID for tabbed property sheets.
-	 * 
-	 * @return the contributor id
-	 */
-	@Override
-	public String getContributorId() {
-		return CONTRIBUTOR_ID;
-	}
-
-	public TargetRuntime getTargetRuntime() {
-		if (targetRuntime==null) {
-			if (modelFile==null)
-				return TargetRuntime.getDefaultRuntime();
-			targetRuntime = TargetRuntime.getRuntime(modelFile);
-		}
-		return targetRuntime;
 	}
 	
 	private void importDiagram() {

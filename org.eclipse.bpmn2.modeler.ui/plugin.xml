@@ -99,7 +99,7 @@
 		</runtime>
 
 		<emfResourceFactory runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
-			class="org.eclipse.bpmn2.modeler.core.utils.Bpmn2ModelerResourceFactoryImpl">
+			class="org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceFactoryImpl">
 		</emfResourceFactory>
 
 		<propertyTab category="BPMN2"
@@ -119,15 +119,6 @@
 			class="org.eclipse.bpmn2.modeler.ui.property.Bpmn2MainPropertySection"
 			filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
 			id="org.eclipse.bpmn2.modeler.main.tab.section"
-			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
-			tab="org.eclipse.bpmn2.modeler.main.tab">
-		</propertySection>
-
-		<propertySection
-			class="org.eclipse.bpmn2.modeler.ui.property.AdvancedPropertySection"
-			filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
-			id="org.eclipse.bpmn2.modeler.main.tab.section2"
-			afterSection="org.eclipse.bpmn2.modeler.main.tab.section"
 			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
 			tab="org.eclipse.bpmn2.modeler.main.tab">
 		</propertySection>
