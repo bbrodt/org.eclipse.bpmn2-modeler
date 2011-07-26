@@ -8,39 +8,20 @@
  * Contributors: 
  * Red Hat, Inc. - initial API and implementation 
  ******************************************************************************/
-package org.eclipse.bpmn2.modeler.extras;
-
-import java.util.ArrayList;
+package org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.features;
 
 import org.eclipse.bpmn2.Task;
-import org.eclipse.bpmn2.modeler.core.preferences.ToolEnablementPreferences;
-import org.eclipse.bpmn2.modeler.core.ModelHandler;
 import org.eclipse.bpmn2.modeler.core.features.MultiUpdateFeature;
-import org.eclipse.bpmn2.modeler.core.features.UpdateBaseElementNameFeature;
-import org.eclipse.bpmn2.modeler.core.features.activity.task.AddTaskFeature;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.UpdateTaskFeature;
-import org.eclipse.bpmn2.modeler.core.utils.GraphicsUtil;
+import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.LogTask;
+import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.ModelFactory;
 import org.eclipse.bpmn2.modeler.ui.ImageProvider;
 import org.eclipse.bpmn2.modeler.ui.features.activity.task.CustomTaskFeatureContainer;
-import org.eclipse.bpmn2.modeler.ui.features.flow.SequenceFlowFeatureContainer.UpdateConditionalSequenceFlowFeature;
-import org.eclipse.bpmn2.modeler.ui.features.flow.SequenceFlowFeatureContainer.UpdateDefaultSequenceFlowFeature;
-import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.graphiti.features.IAddFeature;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.IReason;
-import org.eclipse.graphiti.features.IUpdateFeature;
-import org.eclipse.graphiti.features.context.IAddContext;
-import org.eclipse.graphiti.features.context.IAreaContext;
 import org.eclipse.graphiti.features.context.ICreateContext;
 import org.eclipse.graphiti.features.context.IUpdateContext;
-import org.eclipse.graphiti.features.context.impl.AddContext;
-import org.eclipse.graphiti.mm.Property;
-import org.eclipse.graphiti.mm.algorithms.Image;
-import org.eclipse.graphiti.mm.algorithms.RoundedRectangle;
-import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.graphiti.services.Graphiti;
-import org.eclipse.graphiti.services.IGaService;
 
 public class LogTaskFeatureContainer extends CustomTaskFeatureContainer {
 
@@ -84,14 +65,15 @@ public class LogTaskFeatureContainer extends CustomTaskFeatureContainer {
 		}
 
 		protected Task createFlowElement(ICreateContext context) {
-			Task task = ModelHandler.FACTORY.createTask();
+			LogTask task = ModelFactory.eINSTANCE.createLogTask();
 			task.setName("Log Task");
-			ArrayList<EStructuralFeature> attributes = ToolEnablementPreferences
-					.getAttributes(task.eClass());
-			for (EStructuralFeature eStructuralFeature : attributes) {
-				if (eStructuralFeature.getName().equals("taskName"))
-					task.eSet(eStructuralFeature, "log");
-			}
+//			ArrayList<EStructuralFeature> attributes = ToolEnablementPreferences
+//					.getAttributes(task.eClass());
+//			for (EStructuralFeature eStructuralFeature : attributes) {
+//				if (eStructuralFeature.getName().equals("taskName"))
+//					task.eSet(eStructuralFeature, "log");
+//			}
+			task.setTaskName("log");
 			return task;
 		}
 

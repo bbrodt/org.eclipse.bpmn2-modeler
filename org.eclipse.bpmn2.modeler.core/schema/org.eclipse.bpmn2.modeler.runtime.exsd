@@ -22,6 +22,7 @@
             <element ref="emfResourceFactory"/>
             <element ref="propertyTab"/>
             <element ref="propertySection"/>
+            <element ref="customTask"/>
          </choice>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -256,6 +257,35 @@
                </documentation>
                <appinfo>
                   <meta.attribute kind="java"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="customTask">
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Descriptive name for this Custom Task. This will be displayed in the Tool Palette.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Unique ID used to identify the Custom Task.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="createFeature" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The Graphiti Feature Container that provides create, add and update functionality in the editor for this Custom Task.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.bpmn2.modeler.ui.features.activity.task.CustomTaskFeatureContainer:"/>
                </appinfo>
             </annotation>
          </attribute>
