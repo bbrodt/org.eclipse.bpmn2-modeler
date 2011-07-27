@@ -87,17 +87,27 @@ public class MainPropertiesComposite extends AbstractBpmn2PropertiesComposite {
 		for (EAttribute a : eAllAttributes) {
 
 			if (preferences.isEnabled(be.eClass(), a)) {
+				String displayName;
+				boolean isMultiLine = false;
 				IItemPropertyDescriptor propertyDescriptor = itemProviderAdapter.getPropertyDescriptor(be, a);
 
+				if (propertyDescriptor!=null) {
+					displayName = propertyDescriptor.getDisplayName(be);
+					isMultiLine = propertyDescriptor.isMultiLine(be);
+				}
+				else {
+					displayName = a.getName();
+				}
+				
 				if (String.class.equals(a.getEType().getInstanceClass())) {
-					bind(a, createTextInput(propertyDescriptor.getDisplayName(be), propertyDescriptor.isMultiLine(be)));
+					bind(a, createTextInput(displayName, isMultiLine));
 				} else if (boolean.class.equals(a.getEType().getInstanceClass())) {
-					bindBoolean(a, createBooleanInput(propertyDescriptor.getDisplayName(be)));
+					bindBoolean(a, createBooleanInput(displayName));
 				} else if (int.class.equals(a.getEType().getInstanceClass())) {
-					bindInt(a, createIntInput(propertyDescriptor.getDisplayName(be)));
+					bindInt(a, createIntInput(displayName));
 				} else if (propertyDescriptor != null) {
 					propertyDescriptor.getChoiceOfValues(be);
-					createLabel(propertyDescriptor.getDisplayName(be));
+					createLabel(displayName);
 					createSingleItemEditor(a, be.eGet(a), propertyDescriptor.getChoiceOfValues(be));
 				}
 			}
@@ -107,7 +117,8 @@ public class MainPropertiesComposite extends AbstractBpmn2PropertiesComposite {
 		for (EReference e : be.eClass().getEAllReferences()) {
 			if (preferences.isEnabled(be.eClass(), e) && !eAllContainments.contains(e)) {
 				IItemPropertyDescriptor propertyDescriptor = itemProviderAdapter.getPropertyDescriptor(be, e);
-				bindReference(e, propertyDescriptor.getDisplayName(e));
+				if (propertyDescriptor!=null)
+					bindReference(e, propertyDescriptor.getDisplayName(e));
 			}
 		}
 

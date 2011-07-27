@@ -1,5 +1,7 @@
 package org.eclipse.bpmn2.modeler.ui.features.activity.task;
 
+import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.impl.TaskImpl;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.AbstractCreateTaskFeature;
 import org.eclipse.bpmn2.modeler.ui.diagram.BPMNFeatureProvider;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -30,6 +32,13 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer {
 			return null;
 
 		return super.getApplyObject(context);
+	}
+
+	@Override
+	public boolean canApplyTo(Object o) {
+		boolean b1 =  o instanceof TaskImpl;
+		boolean b2 = o.getClass().isAssignableFrom(TaskImpl.class);
+		return b1 || b2;
 	}
 
 	/**

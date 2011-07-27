@@ -14,25 +14,31 @@
 		</emfResourceFactory>
 
 		<propertyTab afterTab="org.eclipse.bpmn2.modeler.advanced.tab"
-			category="BPMN2" id="bpmn2.jbpm.tab" runtimeId="org.jboss.runtime.jbpm5"
+			category="BPMN2"
+			id="bpmn2.jbpm.tab"
+			runtimeId="org.jboss.runtime.jbpm5"
 			label="jBPM">
 		</propertyTab>
 
 		<propertySection
 			class="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.property.JbpmPropertySection"
 			filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
-			id="bpmn2.jbpm.tab.section" runtimeId="org.jboss.runtime.jbpm5" tab="bpmn2.jbpm.tab">
+			id="bpmn2.jbpm.tab.section"
+			runtimeId="org.jboss.runtime.jbpm5"
+			tab="bpmn2.jbpm.tab">
 		</propertySection>
 
 		<customTask
 			createFeature="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.features.LogTaskFeatureContainer"
 			id="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.LogTask"
+			runtimeId="org.jboss.runtime.jbpm5"
 			name="Log Task">
 		</customTask>
 
 		<customTask
 			createFeature="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.features.EmailTaskFeatureContainer"
 			id="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.EmailTask"
+			runtimeId="org.jboss.runtime.jbpm5"
 			name="Email Task">
 		</customTask>
 

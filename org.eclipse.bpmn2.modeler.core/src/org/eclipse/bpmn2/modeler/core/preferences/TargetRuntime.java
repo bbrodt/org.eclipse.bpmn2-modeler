@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.bpmn2.modeler.core.AbstractPropertyChangeListenerProvider;
 import org.eclipse.bpmn2.modeler.core.Activator;
 import org.eclipse.bpmn2.modeler.core.IBpmn2RuntimeExtension;
+import org.eclipse.bpmn2.modeler.core.features.FeatureContainer;
 import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
@@ -39,6 +40,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	protected ResourceFactoryImpl emfResourceFactory;
 	protected ArrayList<Bpmn2TabDescriptor> tabDescriptors;
 	protected ArrayList<Bpmn2SectionDescriptor> sectionDescriptors;
+	protected ArrayList<CustomTask> customTasks;
 	
 	public TargetRuntime(String id, String name, String versions, String description) {
 		this.id = id;
@@ -61,16 +63,6 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		return getRuntime(DEFAULT_RUNTIME_ID);
 	}
 	
-//	public static void setRuntime(TargetRuntime rt) {
-//		currentRuntime = rt;
-//	}
-	
-//	public static void setRuntime(String id) {
-//		currentRuntime = getRuntime(id);
-//		if (currentRuntime==null)
-//			currentRuntime = getRuntime(DEFAULT_RUNTIME_ID);
-//	}
-
 	public void setResourceSet(ResourceSet resourceSet) {
 		resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap().put(
 				Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID, emfResourceFactory);
@@ -119,6 +111,13 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 							td.indented = indented!=null && indented.trim().equalsIgnoreCase("true");
 							
 							rt.getTabs().add(td);
+						}
+						else if (e.getName().equals("customTask")) {
+							String id = e.getAttribute("id");
+							String name = e.getAttribute("name");
+							CustomTask ct = new CustomTask(id,name);
+							ct.createFeature = (FeatureContainer) e.createExecutableExtension("createFeature");
+							rt.getCustomTasks().add(ct);
 						}
 					}
 				}
@@ -194,6 +193,13 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		return description;
 	}
 	
+	public ArrayList<CustomTask> getCustomTasks()
+	{
+		if (customTasks==null) {
+			customTasks = new ArrayList<CustomTask>();
+		}
+		return customTasks;
+	}
 	private static void addAfterTab(ArrayList<Bpmn2TabDescriptor> list, Bpmn2TabDescriptor tab) {
 		
 		getAllRuntimes();
@@ -404,5 +410,29 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 			return super.getInputTypes();
 		}
 		
+	}
+	
+	public static class CustomTask {
+
+		protected String id;
+		protected String name;
+		protected FeatureContainer createFeature;
+		
+		public CustomTask(String id, String name) {
+			this.id = id;
+			this.name = name;
+		}
+		
+		public String getId() {
+			return id;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public FeatureContainer getCreateFeature() {
+			return createFeature;
+		}
 	}
 }

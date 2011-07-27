@@ -7,7 +7,7 @@
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../org.eclipse.bpmn2/model/BPMN20.genmodel#//bpmn2 ../../org.eclipse.bpmn2/model/BPMN20.genmodel#//di ../../org.eclipse.bpmn2/model/BPMN20.genmodel#//di.1 ../../org.eclipse.bpmn2/model/BPMN20.genmodel#//dc">
   <foreignModel>jBPM5Extensions.ecore</foreignModel>
   <genPackages prefix="Model" basePackage="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5"
-      disposableProviderFactory="true" ecorePackage="jBPM5Extensions.ecore#/">
+      resource="XML" disposableProviderFactory="true" ecorePackage="jBPM5Extensions.ecore#/">
     <genClasses ecoreClass="jBPM5Extensions.ecore#//JBPM5CustomTask">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute jBPM5Extensions.ecore#//JBPM5CustomTask/taskName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute jBPM5Extensions.ecore#//JBPM5CustomTask/displayName"/>

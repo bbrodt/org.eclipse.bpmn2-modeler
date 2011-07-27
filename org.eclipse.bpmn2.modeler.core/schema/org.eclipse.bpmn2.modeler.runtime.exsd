@@ -265,17 +265,24 @@
 
    <element name="customTask">
       <complexType>
-         <attribute name="name" type="string" use="required">
-            <annotation>
-               <documentation>
-                  Descriptive name for this Custom Task. This will be displayed in the Tool Palette.
-               </documentation>
-            </annotation>
-         </attribute>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
                   Unique ID used to identify the Custom Task.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="runtimeId" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Identifies one of the previously defined runtime elements for which this section will be displayed.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Descriptive name for this Custom Task. This will be displayed in the Tool Palette.
                </documentation>
             </annotation>
          </attribute>
