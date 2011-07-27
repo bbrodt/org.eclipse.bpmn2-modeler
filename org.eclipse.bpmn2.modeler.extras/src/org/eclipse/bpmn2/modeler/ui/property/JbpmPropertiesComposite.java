@@ -22,6 +22,7 @@ import org.eclipse.bpmn2.modeler.ui.property.AbstractBpmn2PropertiesComposite;
 import org.eclipse.core.databinding.Binding;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.BasicFeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
@@ -66,7 +67,7 @@ public class JbpmPropertiesComposite extends AbstractBpmn2PropertiesComposite {
 	}
 
 	@Override
-	public void createBindings() {
+	public void createBindings(EObject be) {
 		boolean showCustomButton = be.eClass().getInstanceClass()
 				.equals(Task.class);
 		customEditorButton.setVisible(showCustomButton);

@@ -44,6 +44,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -106,12 +107,13 @@ public abstract class AbstractBpmn2PropertiesComposite extends Composite {
 		this.bpmn2Editor = bpmn2Editor;
 	}
 
-	private final void setEObject(final EObject be) {
+	protected final void setEObject(final EObject be) {
 		this.be = be;
 		cleanBindings();
 		if (be != null) {
-			createBindings();
+			createBindings(be);
 		}
+		parent.getParent().layout(true, true);
 		layout(true, true);
 	}
 
@@ -119,7 +121,7 @@ public abstract class AbstractBpmn2PropertiesComposite extends Composite {
 	 * This method is called when setEObject is called and this should recreate all bindings and widgets for the
 	 * component.
 	 */
-	public abstract void createBindings();
+	public abstract void createBindings(EObject be);
 
 	protected Text createTextInput(String name, boolean multiLine) {
 		createLabel(name);

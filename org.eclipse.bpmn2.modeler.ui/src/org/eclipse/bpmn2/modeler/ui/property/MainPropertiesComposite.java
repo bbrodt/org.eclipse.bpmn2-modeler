@@ -25,7 +25,6 @@ import org.eclipse.bpmn2.modeler.core.preferences.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.ui.Activator;
 import org.eclipse.bpmn2.provider.Bpmn2ItemProviderAdapterFactory;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.Enumerator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -69,7 +68,7 @@ public class MainPropertiesComposite extends AbstractBpmn2PropertiesComposite {
 
 	@SuppressWarnings("restriction")
 	@Override
-	public void createBindings() {
+	public void createBindings(EObject be) {
 		try {
 			modelHandler = ModelHandlerLocator.getModelHandler(bpmn2Editor.getDiagramTypeProvider().getDiagram()
 					.eResource());

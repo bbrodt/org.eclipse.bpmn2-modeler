@@ -8,18 +8,24 @@ import org.eclipse.bpmn2.modeler.core.Activator;
 import org.eclipse.bpmn2.modeler.core.IBpmn2RuntimeExtension;
 import org.eclipse.bpmn2.modeler.core.features.FeatureContainer;
 import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.gef.EditPart;
+import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.AbstractSectionDescriptor;
 import org.eclipse.ui.views.properties.tabbed.AbstractTabDescriptor;
 import org.eclipse.ui.views.properties.tabbed.ISection;
+import org.eclipse.ui.views.properties.tabbed.TabContents;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPart;
 
 
@@ -137,8 +143,10 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 							sd.afterSection = e.getAttribute("afterSection");
 							sd.filter = e.getAttribute("filter");
 							sd.enablesFor = e.getAttribute("enablesFor");
-							sd.type = e.getAttribute("type");
-							
+							String type = e.getAttribute("type");
+							if (type!=null && !type.isEmpty())
+								sd.appliesToClass = Class.forName(type);
+
 							rt.getSections().add(sd);
 						}
 					}
@@ -149,9 +157,9 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 					for (Bpmn2TabDescriptor td : rt.getTabs()) {
 						for (Bpmn2SectionDescriptor sd : rt.getSections()) {
 							if (sd.tab.equals(td.id)) {
-								if (td.sectionDescriptors==null)
-									td.sectionDescriptors = new ArrayList<Bpmn2SectionDescriptor>();
-								td.sectionDescriptors.add(sd);
+								if (td.unfilteredSectionDescriptors==null)
+									td.unfilteredSectionDescriptors = new ArrayList<Bpmn2SectionDescriptor>();
+								td.unfilteredSectionDescriptors.add(sd);
 							}
 						}
 					}
@@ -289,7 +297,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		protected String afterTab = null;
 		protected boolean indented = false;
 		protected Image image = null;
-		protected ArrayList<Bpmn2SectionDescriptor> sectionDescriptors = null;
+		protected ArrayList<Bpmn2SectionDescriptor> unfilteredSectionDescriptors = null;
 		
 		public Bpmn2TabDescriptor(String id, String category, String label) {
 			this.id = id;
@@ -328,14 +336,41 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 
 		@Override
 		public List getSectionDescriptors() {
-			if (sectionDescriptors==null)
+			if (unfilteredSectionDescriptors==null)
 				return super.getSectionDescriptors();
-			return sectionDescriptors;
+			return unfilteredSectionDescriptors;
+		}
+
+		@Override
+		public TabContents createTab() {
+			// TODO Auto-generated method stub
+			return super.createTab();
+		}
+
+		@Override
+		public boolean isSelected() {
+			// TODO Auto-generated method stub
+			return super.isSelected();
+		}
+
+		@Override
+		public void setSectionDescriptors(List sectionDescriptors) {
+			// TODO Auto-generated method stub
+			super.setSectionDescriptors(sectionDescriptors);
 		}
 
 		@Override
 		public boolean isIndented() {
 			return indented;
+		}
+
+		@Override
+		public Object clone() {
+			Bpmn2TabDescriptor clone = new Bpmn2TabDescriptor(id, category, label);
+			clone.afterTab = this.afterTab;
+			clone.image = this.image;
+			clone.indented = this.indented;
+			return clone;
 		}
 		
 	}
@@ -347,7 +382,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		protected String tab;
 		protected String label;
 		protected AbstractPropertySection sectionClass;
-		protected String type;
+		protected Class appliesToClass;
 		protected String enablesFor;
 		protected String filter;
 		protected String afterSection;
@@ -376,8 +411,27 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 
 		@Override
 		public boolean appliesTo(IWorkbenchPart part, ISelection selection) {
-			// TODO Auto-generated method stub
-			return super.appliesTo(part, selection);
+			if (appliesToClass!=null && selection instanceof IStructuredSelection &&
+					((IStructuredSelection) selection).isEmpty()==false) {
+			
+				Object firstElement = ((IStructuredSelection) selection).getFirstElement();
+				EditPart editPart = null;
+				if (firstElement instanceof EditPart) {
+					editPart = (EditPart) firstElement;
+				} else if (firstElement instanceof IAdaptable) {
+					editPart = (EditPart) ((IAdaptable) firstElement).getAdapter(EditPart.class);
+				}
+				if (editPart != null && editPart.getModel() instanceof PictogramElement) {
+					PictogramElement pe = (PictogramElement) editPart.getModel();
+					for (EObject eObj : pe.getLink().getBusinessObjects()){
+						if (appliesToClass.isInstance(eObj)) {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
+			return true;
 		}
 
 		@Override

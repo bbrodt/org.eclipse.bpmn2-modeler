@@ -253,7 +253,7 @@
          <attribute name="type" type="string">
             <annotation>
                <documentation>
-                  The selected class or interface that will enable the display on the section in the tab.
+                  The selected class or interface that will enable the display of the section in the tab. This must be a fully qualified class name, e.g. &quot;org.eclipse.bpmn2.SequenceFlow&quot;.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java"/>

@@ -70,7 +70,12 @@ public class JBPM5ResourceImpl extends Bpmn2ModelerResourceImpl {
                     if (feature != null && obj.eGet(feature) != null) {
                         Object id = obj.eGet(feature);
                         if (id!=null && id.equals(ids)) {
-                        	object.eSet(eReference,obj);
+                        	try {
+                        		object.eSet(eReference,obj);
+                        	}
+                        	catch(Exception e) {
+                        		continue;
+                        	}
                         	return;
                         }
                     }
