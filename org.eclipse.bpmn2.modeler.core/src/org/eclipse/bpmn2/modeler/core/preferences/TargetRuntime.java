@@ -411,6 +411,13 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 
 		@Override
 		public boolean appliesTo(IWorkbenchPart part, ISelection selection) {
+			
+			// should we delegate to the section to determine whether it should be included in this tab?
+			if (sectionClass instanceof IBpmn2PropertySection) {
+				return ((IBpmn2PropertySection)sectionClass).appliesTo(part, selection);
+			}
+			
+			// if an input type was specified, check if the selected business object is of this type. 
 			if (appliesToClass!=null && selection instanceof IStructuredSelection &&
 					((IStructuredSelection) selection).isEmpty()==false) {
 			
@@ -423,9 +430,16 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 				}
 				if (editPart != null && editPart.getModel() instanceof PictogramElement) {
 					PictogramElement pe = (PictogramElement) editPart.getModel();
-					for (EObject eObj : pe.getLink().getBusinessObjects()){
-						if (appliesToClass.isInstance(eObj)) {
-							return true;
+					// this is a special hack to allow selection of connection decorator labels:
+					// the connection decorator does not have a business object linked to it,
+					// but its parent (the connection) does.
+					if (pe.getLink()==null && pe.eContainer() instanceof PictogramElement)
+						pe = (PictogramElement)pe.eContainer();
+					if (pe.getLink()!=null) {
+						for (EObject eObj : pe.getLink().getBusinessObjects()){
+							if (appliesToClass.isInstance(eObj)) {
+								return true;
+							}
 						}
 					}
 				}
@@ -455,7 +469,15 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		@Override
 		public IFilter getFilter() {
 			// TODO Auto-generated method stub
-			return super.getFilter();
+//			return super.getFilter();
+			return new IFilter() {
+
+				@Override
+				public boolean select(Object toTest) {
+					return false;
+				}
+				
+			};
 		}
 
 		@Override

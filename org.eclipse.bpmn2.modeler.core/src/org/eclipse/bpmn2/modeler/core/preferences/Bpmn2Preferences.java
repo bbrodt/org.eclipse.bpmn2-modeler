@@ -1,16 +1,21 @@
 package org.eclipse.bpmn2.modeler.core.preferences;
 
+import org.eclipse.core.internal.resources.ProjectPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.IPreferenceChangeListener;
+import org.eclipse.core.runtime.preferences.IEclipsePreferences.PreferenceChangeEvent;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-public class Bpmn2Preferences {
+@SuppressWarnings("restriction")
+public class Bpmn2Preferences implements IPreferenceChangeListener {
 	public final static String PROJECT_PREFERENCES_ID = "org.eclipse.bpmn2.modeler";
 	public final static String TARGET_RUNTIME_ID = "target.runtime";
+	public final static String SHOW_ADVANCED_PROPERTIES_TAB_ID = "show.advanced.properties";
 	
 	private Preferences prefs;
 	private boolean loaded;
@@ -18,6 +23,7 @@ public class Bpmn2Preferences {
 	
 	// the per-project preferences:
 	private TargetRuntime targetRuntime;
+	private boolean showAdvancedPropertiesTab;
 	
 	// the global user preferences:
 	// TODO: stuff like colors, fonts, etc.
@@ -28,10 +34,23 @@ public class Bpmn2Preferences {
 		prefs = rootNode.node(ProjectScope.SCOPE)
 				.node(project.getName())
 				.node(PROJECT_PREFERENCES_ID);
+		if (prefs instanceof ProjectPreferences)
+			((ProjectPreferences)prefs).addPreferenceChangeListener(this);
 	}
 
 	public void restoreDefaults() {
 		prefs.put(TARGET_RUNTIME_ID,TargetRuntime.DEFAULT_RUNTIME_ID);
+	}
+	
+	public void dispose() {
+		if (prefs instanceof ProjectPreferences)
+			((ProjectPreferences)prefs).removePreferenceChangeListener(this);
+	}
+	
+	public synchronized void reload() {
+		loaded = false;
+		load();
+		dirty = false;
 	}
 	
 	public void load() {
@@ -41,15 +60,16 @@ public class Bpmn2Preferences {
 			// as well as global user preferences.
 			targetRuntime = TargetRuntime.getRuntime(
 					prefs.get(TARGET_RUNTIME_ID,TargetRuntime.DEFAULT_RUNTIME_ID));
-			
+			showAdvancedPropertiesTab = prefs.getBoolean(SHOW_ADVANCED_PROPERTIES_TAB_ID, true);
 			loaded = true;
 		}
 	}
 	
-	public void save() throws BackingStoreException {
+	public synchronized void save() throws BackingStoreException {
 		
 		if (dirty) {
 			prefs.put(TARGET_RUNTIME_ID,targetRuntime.getId());
+			prefs.putBoolean(SHOW_ADVANCED_PROPERTIES_TAB_ID, showAdvancedPropertiesTab);
 			prefs.flush();
 			
 			dirty = false;
@@ -98,5 +118,20 @@ public class Bpmn2Preferences {
 		targetRuntime = rt;
 		
 		dirty = true;
+	}
+	
+	public boolean getShowAdvancedPropertiesTab() {
+		load();
+		return showAdvancedPropertiesTab;
+	}
+	
+	public void setShowAdvancedPropertiesTab(boolean show) {
+		showAdvancedPropertiesTab = show;
+		dirty = true;
+	}
+
+	@Override
+	public void preferenceChange(PreferenceChangeEvent event) {
+		reload();
 	}
 }

@@ -2,12 +2,17 @@ package org.eclipse.bpmn2.modeler.core.utils;
 
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.provider.Bpmn2ItemProviderAdapterFactory;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 
 public class ModelUtil {
 
@@ -216,5 +221,34 @@ public class ModelUtil {
 	public static boolean hasName(BaseElement element) {
 		EStructuralFeature feature = element.eClass().getEStructuralFeature("name");
 		return feature!=null;
+	}
+	
+	public static String getDisplayName(EObject obj, EAttribute attr) {
+		if (attr!=null) {
+			ItemProviderAdapter itemProviderAdapter = (ItemProviderAdapter) new Bpmn2ItemProviderAdapterFactory()
+					.adapt(obj, ItemProviderAdapter.class);
+			
+			IItemPropertyDescriptor propertyDescriptor = itemProviderAdapter.getPropertyDescriptor(obj,attr);
+			if (propertyDescriptor!=null)
+				return propertyDescriptor.getDisplayName(attr);
+			
+			// There are no property descriptors available for this EObject -
+			// this is probably because the "edit" plugin was not generated for
+			// the EMF model, or is not available.
+			// Use the class name to synthesize a display name
+			obj = attr;
+		}
+		
+		String className = obj.eClass().getName();
+		className = className.replaceAll("Impl$", "");
+		String displayName = "";
+		for (char c : className.toCharArray()) {
+			if ('A'<=c && c<'Z') {
+				if (displayName.length()>0)
+					displayName += " ";
+			}
+			displayName += c;
+		}
+		return displayName;
 	}
 }

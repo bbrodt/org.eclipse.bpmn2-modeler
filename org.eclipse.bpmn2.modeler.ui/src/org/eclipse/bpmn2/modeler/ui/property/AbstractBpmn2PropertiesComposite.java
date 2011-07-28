@@ -117,6 +117,10 @@ public abstract class AbstractBpmn2PropertiesComposite extends Composite {
 		layout(true, true);
 	}
 
+	protected void setBusinessObject(EObject be) {
+		this.be = be;
+	}
+	
 	/**
 	 * This method is called when setEObject is called and this should recreate all bindings and widgets for the
 	 * component.

@@ -13,7 +13,7 @@
 			class="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.util.JBPM5ResourceFactoryImpl">
 		</emfResourceFactory>
 
-		<propertyTab afterTab="org.eclipse.bpmn2.modeler.advanced.tab"
+		<propertyTab afterTab="org.eclipse.bpmn2.modeler.condition.tab"
 			category="BPMN2"
 			id="bpmn2.jbpm.tab"
 			runtimeId="org.jboss.runtime.jbpm5"

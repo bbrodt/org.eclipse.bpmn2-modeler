@@ -315,6 +315,7 @@ public class BPMN2Editor extends DiagramEditor {
 		if (!workbenchShutdown)
 			BPMN2DiagramCreator.dispose(diagramFile);
 		removeWorkbenchListener();
+		getPreferences().dispose();
 	}
 
 	public IFile getModelFile() {

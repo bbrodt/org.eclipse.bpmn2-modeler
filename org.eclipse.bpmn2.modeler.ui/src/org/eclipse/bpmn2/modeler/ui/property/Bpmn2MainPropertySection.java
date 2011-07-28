@@ -46,7 +46,7 @@ public class Bpmn2MainPropertySection extends GFPropertySection implements ITabb
 	public void refresh() {
 		PictogramElement pe = getSelectedPictogramElement();
 		if (pe != null) {
-			EObject be = BusinessObjectUtil.getFirstElementOfType(pe, BaseElement.class);
+			EObject be = BusinessObjectUtil.getFirstElementOfType(pe, BaseElement.class,true);
 			if (be==null) {
 				// maybe it's the Diagram (editor canvas)?
 				be = BusinessObjectUtil.getFirstElementOfType(pe, BPMNDiagram.class);

@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -19,6 +20,7 @@ public class Bpmn2PropertyPage extends PropertyPage {
 	private Bpmn2Preferences prefs;
 	
 	private Combo cboRuntimes;
+	private Button btnShowAdvancedProperties;
 	
 	public Bpmn2PropertyPage() {
 		super();
@@ -48,6 +50,11 @@ public class Bpmn2PropertyPage extends PropertyPage {
 				cboRuntimes.select(i);
 			++i;
 		}
+		
+		btnShowAdvancedProperties = new Button(container, SWT.CHECK);
+		btnShowAdvancedProperties.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 2, 1));
+		btnShowAdvancedProperties.setText("Show the Advanced Properties Tab for BPMN2 Elements");
+		btnShowAdvancedProperties.setSelection( prefs.getShowAdvancedPropertiesTab() );
 
 		return container;
 	}
@@ -80,10 +87,20 @@ public class Bpmn2PropertyPage extends PropertyPage {
 		return true;
 	}
 
+	@Override
+	public void dispose() {
+		prefs.dispose();
+		super.dispose();
+	}
+
 	private void updateData() throws BackingStoreException {
 		int i = cboRuntimes.getSelectionIndex();
 		TargetRuntime rt = TargetRuntime.getAllRuntimes()[i];
 		prefs.setRuntime(rt);
+		
+		boolean show = btnShowAdvancedProperties.getSelection();
+		prefs.setShowAdvancedPropertiesTab(show);
+		
 		prefs.save();
 	}
 }

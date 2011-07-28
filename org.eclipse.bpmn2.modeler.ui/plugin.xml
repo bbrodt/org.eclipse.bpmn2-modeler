@@ -105,7 +105,7 @@
 		<propertyTab category="BPMN2"
 			id="org.eclipse.bpmn2.modeler.main.tab"
 			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
-			label="BPMN2">
+			label="Basic">
 		</propertyTab>
 
 		<propertyTab category="BPMN2"
@@ -116,10 +116,10 @@
 		</propertyTab>
 		
 		<propertyTab category="BPMN2"
-			id="org.eclipse.bpmn2.modeler.condition.tab"
+			id="org.eclipse.bpmn2.modeler.sequenceflow.tab"
 			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
 			afterTab="org.eclipse.bpmn2.modeler.advanced.tab"
-			label="Condition">
+			label="Sequence Flow">
 		</propertyTab>
 
 		<propertySection
@@ -139,12 +139,12 @@
 		</propertySection>
 		
 		<propertySection
-			class="org.eclipse.bpmn2.modeler.ui.property.ConditionPropertySection"
+			class="org.eclipse.bpmn2.modeler.ui.property.SequenceFlowPropertySection"
 			filter="org.eclipse.bpmn2.modeler.ui.property.Bpmn2PropertyFilter"
-			id="org.eclipse.bpmn2.modeler.condition.section"
+			id="org.eclipse.bpmn2.modeler.sequenceflow.section"
 			runtimeId="org.eclipse.bpmn2.modeler.runtime.none"
 			type="org.eclipse.bpmn2.SequenceFlow"
-			tab="org.eclipse.bpmn2.modeler.condition.tab">
+			tab="org.eclipse.bpmn2.modeler.sequenceflow.tab">
 		</propertySection>
 
 	</extension>
