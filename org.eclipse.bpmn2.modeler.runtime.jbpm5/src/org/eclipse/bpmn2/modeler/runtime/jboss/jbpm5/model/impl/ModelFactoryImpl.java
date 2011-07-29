@@ -62,7 +62,6 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 		switch (eClass.getClassifierID()) {
 			case ModelPackage.JBPM5_CUSTOM_TASK: return createJBPM5CustomTask();
 			case ModelPackage.PARAMETER: return createParameter();
-			case ModelPackage.LOG_TASK: return createLogTask();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -86,16 +85,6 @@ public class ModelFactoryImpl extends EFactoryImpl implements ModelFactory {
 	public Parameter createParameter() {
 		ParameterImpl parameter = new ParameterImpl();
 		return parameter;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LogTask createLogTask() {
-		LogTaskImpl logTask = new LogTaskImpl();
-		return logTask;
 	}
 
 	/**

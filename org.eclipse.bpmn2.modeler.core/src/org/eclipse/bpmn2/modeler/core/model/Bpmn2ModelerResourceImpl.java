@@ -34,7 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public class Bpmn2ModelerResourceImpl extends Bpmn2ResourceImpl {
 
-	public static final String BPMN2_CONTENT_TYPE_ID = "org.eclipse.bpmn2.content-type.xml";
+	public static final String BPMN2_CONTENT_TYPE_ID = "org.eclipse.bpmn2.content-description.xml";
 
     /**
      * Creates an instance of the resource.

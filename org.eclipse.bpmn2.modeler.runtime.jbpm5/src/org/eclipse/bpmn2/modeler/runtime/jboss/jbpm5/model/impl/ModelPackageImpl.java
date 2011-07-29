@@ -11,7 +11,6 @@ import org.eclipse.bpmn2.Bpmn2Package;
 import org.eclipse.bpmn2.di.BpmnDiPackage;
 
 import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask;
-import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.LogTask;
 import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.ModelFactory;
 import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.ModelPackage;
 import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.Parameter;
@@ -47,13 +46,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * @generated
 	 */
 	private EClass parameterEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass logTaskEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -217,15 +209,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getLogTask() {
-		return logTaskEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public ModelFactory getModelFactory() {
 		return (ModelFactory)getEFactoryInstance();
 	}
@@ -260,8 +243,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		createEAttribute(parameterEClass, PARAMETER__NAME);
 		createEAttribute(parameterEClass, PARAMETER__TYPE);
 		createEAttribute(parameterEClass, PARAMETER__VALUE);
-
-		logTaskEClass = createEClass(LOG_TASK);
 	}
 
 	/**
@@ -296,7 +277,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 
 		// Add supertypes to classes
 		jbpm5CustomTaskEClass.getESuperTypes().add(theBpmn2Package.getTask());
-		logTaskEClass.getESuperTypes().add(this.getJBPM5CustomTask());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(jbpm5CustomTaskEClass, JBPM5CustomTask.class, "JBPM5CustomTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -310,8 +290,6 @@ public class ModelPackageImpl extends EPackageImpl implements ModelPackage {
 		initEAttribute(getParameter_Name(), ecorePackage.getEString(), "name", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getParameter_Type(), ecorePackage.getEString(), "type", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getParameter_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, Parameter.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(logTaskEClass, LogTask.class, "LogTask", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

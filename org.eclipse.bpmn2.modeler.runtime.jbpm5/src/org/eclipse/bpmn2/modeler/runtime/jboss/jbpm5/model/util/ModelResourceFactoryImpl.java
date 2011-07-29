@@ -6,27 +6,28 @@
  */
 package org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.util;
 
+import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceFactoryImpl;
+import org.eclipse.bpmn2.util.OnlyContainmentTypeInfo;
+import org.eclipse.bpmn2.util.XmlExtendedMetadata;
 import org.eclipse.emf.common.util.URI;
-
 import org.eclipse.emf.ecore.resource.Resource;
-
-import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
-
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.impl.ElementHandlerImpl;
 
 /**
  * <!-- begin-user-doc -->
  * The <b>Resource Factory</b> associated with the package.
  * <!-- end-user-doc -->
  * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.util.ModelResourceImpl
- * @generated
+ * @generated NOT
  */
-public class ModelResourceFactoryImpl extends ResourceFactoryImpl {
+public class ModelResourceFactoryImpl extends Bpmn2ModelerResourceFactoryImpl {
 	/**
-	 * Creates an instance of the resource factory.
+	 * Creates an instance of the resource eFactory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public ModelResourceFactoryImpl() {
 		super();
@@ -36,21 +37,31 @@ public class ModelResourceFactoryImpl extends ResourceFactoryImpl {
 	 * Creates an instance of the resource.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
-	@Override
-	public Resource createResource(URI uri) {
-		XMLResource result = new ModelResourceImpl(uri);
-		result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
-		result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+    @Override
+    public Resource createResource(URI uri) {
+    	ModelResourceImpl result = new ModelResourceImpl(uri);
+        ExtendedMetaData extendedMetadata = new XmlExtendedMetadata();
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
+        result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, extendedMetadata);
 
-		result.getDefaultSaveOptions().put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_SAVE_TYPE_INFORMATION,
+                new OnlyContainmentTypeInfo());
 
-		result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
-		result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+        result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE,
+                Boolean.TRUE);
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE,
+                Boolean.TRUE);
 
-		result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
-		return result;
-	}
+        result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
+
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_ELEMENT_HANDLER,
+                new ElementHandlerImpl(true));
+
+        result.getDefaultSaveOptions().put(XMLResource.OPTION_ENCODING, "UTF-8");
+
+        return result;
+    }
 
 } //ModelResourceFactoryImpl

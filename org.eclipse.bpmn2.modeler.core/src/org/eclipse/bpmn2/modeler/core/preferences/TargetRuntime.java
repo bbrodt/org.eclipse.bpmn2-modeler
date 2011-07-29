@@ -6,27 +6,34 @@ import java.util.List;
 import org.eclipse.bpmn2.modeler.core.AbstractPropertyChangeListenerProvider;
 import org.eclipse.bpmn2.modeler.core.Activator;
 import org.eclipse.bpmn2.modeler.core.IBpmn2RuntimeExtension;
-import org.eclipse.bpmn2.modeler.core.features.FeatureContainer;
+import org.eclipse.bpmn2.modeler.core.features.activity.task.ICustomTaskFeature;
 import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor.Property;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor.Value;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.impl.EFactoryImpl;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.gef.EditPart;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
+import org.eclipse.jface.viewers.IFilter;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
 import org.eclipse.ui.views.properties.tabbed.AbstractSectionDescriptor;
 import org.eclipse.ui.views.properties.tabbed.AbstractTabDescriptor;
 import org.eclipse.ui.views.properties.tabbed.ISection;
 import org.eclipse.ui.views.properties.tabbed.TabContents;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.jface.viewers.IFilter;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbenchPart;
 
 
 public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
@@ -43,10 +50,10 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	protected String id;
 	protected String description;
 	protected IBpmn2RuntimeExtension runtimeExtension;
-	protected ResourceFactoryImpl emfResourceFactory;
+	protected ModelDescriptor modelDescriptor;
 	protected ArrayList<Bpmn2TabDescriptor> tabDescriptors;
 	protected ArrayList<Bpmn2SectionDescriptor> sectionDescriptors;
-	protected ArrayList<CustomTask> customTasks;
+	protected ArrayList<CustomTaskDescriptor> customTasks;
 	
 	public TargetRuntime(String id, String name, String versions, String description) {
 		this.id = id;
@@ -71,7 +78,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	
 	public void setResourceSet(ResourceSet resourceSet) {
 		resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap().put(
-				Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID, emfResourceFactory);
+				Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID, modelDescriptor.resourceFactory);
 	}
 	
 	public static TargetRuntime[] getAllRuntimes() {
@@ -103,8 +110,16 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 					if (!e.getName().equals("runtime")) {
 						TargetRuntime rt = getRuntime(e);
 						
-						if (e.getName().equals("emfResourceFactory")) {
-							rt.emfResourceFactory = (ResourceFactoryImpl) e.createExecutableExtension("class");
+						if (e.getName().equals("model")) {
+							ModelDescriptor md = new ModelDescriptor();
+							if (e.getAttribute("uri")!=null) {
+								String uri = e.getAttribute("uri");
+								md.ePackage = EPackage.Registry.INSTANCE.getEPackage(uri);
+								md.eFactory = md.ePackage.getEFactoryInstance();
+							}
+							if (e.getAttribute("resourceFactory")!=null)
+								md.resourceFactory = (ResourceFactoryImpl) e.createExecutableExtension("resourceFactory");
+							rt.setModelDescriptor(md);
 						}
 						else if (e.getName().equals("propertyTab")) {
 							String id = e.getAttribute("id");
@@ -121,9 +136,14 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 						else if (e.getName().equals("customTask")) {
 							String id = e.getAttribute("id");
 							String name = e.getAttribute("name");
-							CustomTask ct = new CustomTask(id,name);
-							ct.createFeature = (FeatureContainer) e.createExecutableExtension("createFeature");
-							rt.getCustomTasks().add(ct);
+							CustomTaskDescriptor ct = new CustomTaskDescriptor(id,name);
+							ct.type = e.getAttribute("type");
+							ct.description = e.getAttribute("description");
+							ct.createFeature = (ICustomTaskFeature) e.createExecutableExtension("createFeature");
+							ct.createFeature.setCustomTaskDescriptor(ct);
+							ct.createFeature.setId(id);
+							getCustomTaskProperties(ct,e);
+							rt.addCustomTask(ct);
 						}
 					}
 				}
@@ -172,6 +192,50 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		return targetRuntimes;
 	}
 	
+	private static Object getCustomTaskProperties(CustomTaskDescriptor ct, IConfigurationElement e) {
+		
+		String elem = e.getName();
+		if ("value".equals(elem)) {
+			String id = e.getAttribute("id");
+			Value val = new Value(id);
+			for (IConfigurationElement cc : e.getChildren()) {
+				Object propValue = getCustomTaskProperties(ct, cc);
+				val.getValues().add(propValue);
+			}
+			return val;
+		}
+		else {
+			if (e.getChildren().length==0) {
+				if ("property".equals(elem)) {
+					String name = e.getAttribute("name");
+					String value = e.getAttribute("value");
+					String description = e.getAttribute("description");
+					Property prop = new Property(name,description);
+					if (value!=null)
+						prop.getValues().add(value);
+					return prop;
+				}
+			}
+			else {
+				for (IConfigurationElement c : e.getChildren()) {
+					elem = c.getName();
+					String name = c.getAttribute("name");
+					String value = c.getAttribute("value");
+					String description = c.getAttribute("description");
+					Property prop = new Property(name,description); 
+					if (value!=null)
+						prop.getValues().add(value);
+					for (IConfigurationElement cc : c.getChildren()) {
+						Object propValue = getCustomTaskProperties(ct, cc);
+						prop.getValues().add(propValue);
+					}
+					ct.getProperties().add(prop);
+				}
+			}
+		}
+		return null;
+	}
+	
 	private static TargetRuntime getRuntime(IConfigurationElement e) throws InvalidRegistryObjectException, Exception {
 		String runtimeId = e.getAttribute("runtimeId");
 		TargetRuntime rt = getRuntime(runtimeId);
@@ -185,8 +249,13 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		return rt;
 	}
 	
-	public ResourceFactoryImpl getEmfResourceFactory() {
-		return emfResourceFactory;
+	public ModelDescriptor getModelDescriptor() {
+		return modelDescriptor;
+	}
+	
+	public void setModelDescriptor(ModelDescriptor md) {
+		md.targetRuntime = this;
+		this.modelDescriptor = md;
 	}
 	
 	public String getName() {
@@ -201,13 +270,19 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		return description;
 	}
 	
-	public ArrayList<CustomTask> getCustomTasks()
+	public ArrayList<CustomTaskDescriptor> getCustomTasks()
 	{
 		if (customTasks==null) {
-			customTasks = new ArrayList<CustomTask>();
+			customTasks = new ArrayList<CustomTaskDescriptor>();
 		}
 		return customTasks;
 	}
+	
+	public void addCustomTask(CustomTaskDescriptor ct) {
+		getCustomTasks().add(ct);
+		ct.targetRuntime = this;
+	}
+	
 	private static void addAfterTab(ArrayList<Bpmn2TabDescriptor> list, Bpmn2TabDescriptor tab) {
 		
 		getAllRuntimes();
@@ -287,6 +362,34 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		}
 		
 		return list;
+	}
+	
+	public static class BaseRuntimeDescriptor {
+		
+		protected TargetRuntime targetRuntime;
+		
+		public TargetRuntime getRuntime() {
+			return targetRuntime;
+		}
+	}
+	
+	public static class ModelDescriptor extends BaseRuntimeDescriptor {
+		
+		protected EPackage ePackage;
+		protected EFactory eFactory;
+		protected ResourceFactoryImpl resourceFactory;
+		
+		public EFactory getEFactory() {
+			return eFactory;
+		}
+		
+		public ResourceFactoryImpl getResourceFactory() {
+			return resourceFactory;
+		}
+		
+		public EPackage getEPackage() {
+			return ePackage;
+		}
 	}
 	
 	public static class Bpmn2TabDescriptor extends AbstractTabDescriptor {
@@ -417,7 +520,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 				return ((IBpmn2PropertySection)sectionClass).appliesTo(part, selection);
 			}
 			
-			// if an input type was specified, check if the selected business object is of this type. 
+			// if an input description was specified, check if the selected business object is of this description. 
 			if (appliesToClass!=null && selection instanceof IStructuredSelection &&
 					((IStructuredSelection) selection).isEmpty()==false) {
 			
@@ -488,13 +591,69 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		
 	}
 	
-	public static class CustomTask {
+	public static class CustomTaskDescriptor extends BaseRuntimeDescriptor {
 
+
+		// Container class for property values
+		public static class Value {
+			
+			static int ID = 0;
+			String id;
+			public List<Object>values;
+			
+			public Value() {
+				setDefaultId();
+			}
+			
+			public Value(String id) {
+				if (id==null || id.isEmpty())
+					setDefaultId();
+				else
+					this.id = id;
+			}
+			
+			public List<Object> getValues() {
+				if (values==null) {
+					values = new ArrayList<Object>();
+				}
+				return values;
+			}
+			
+			private void setDefaultId() {
+				id = "V-" + ID++;
+			}
+		}
+		
+		public static class Property {
+			public String name;
+			public String description;
+			public List<Object>values;
+			
+			public Property() {
+				this.name = "unknown";
+			}
+			
+			public Property(String name, String description) {
+				this.name = name;
+				this.description = description;
+			}
+			
+			public List<Object> getValues() {
+				if (values==null) {
+					values = new ArrayList<Object>();
+				}
+				return values;
+			}
+		}
+		
 		protected String id;
 		protected String name;
-		protected FeatureContainer createFeature;
+		protected String type;
+		protected String description;
+		protected ICustomTaskFeature createFeature;
+		protected List<Property> properties = new ArrayList<Property>();
 		
-		public CustomTask(String id, String name) {
+		public CustomTaskDescriptor(String id, String name) {
 			this.id = id;
 			this.name = name;
 		}
@@ -506,9 +665,40 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		public String getName() {
 			return name;
 		}
+		
+		public String getType() {
+			return type;
+		}
+		
+		public String getDescription() {
+			return description;
+		}
 
-		public FeatureContainer getCreateFeature() {
+		public ICustomTaskFeature getCreateFeature() {
 			return createFeature;
 		}
+		
+		public List<Property> getProperties() {
+			return properties;
+		}
+
+		public static String getStringValue(Property prop) {
+
+			if (!prop.getValues().isEmpty()) {
+				// simple attribute - find a String value for it
+				for (Object propValue : prop.getValues()) {
+					if (propValue instanceof String) {
+						return (String)propValue;
+					}
+					else if (propValue instanceof Property) {
+						String s = getStringValue((Property)propValue);
+						if (s!=null)
+							return s;
+					}
+				}
+			}
+			return null;
+		}
+		
 	}
 }

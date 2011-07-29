@@ -20,11 +20,11 @@ public class ModelUtil {
 	
 	// Map of EMF resource sets to ID mapping tables. The ID mapping tables map a BPMN2 element ID string to the EObject.
 	// The EObject is not used anywhere (yet!) just a placeholder to allow use of a HashMap for fast lookups of the ID string.
-	// The ID strings are composed from the BPMN2 element type name and a sequence number (starting at 1).
+	// The ID strings are composed from the BPMN2 element description name and a sequence number (starting at 1).
 	// When a new ID is requested, generateID() simply increments the sequence number until an ID is found that isn't
 	// already in the table.
 	public static HashMap<Object, Hashtable<String, EObject>> ids = new  HashMap<Object, Hashtable<String, EObject>>();
-	// Map of ID strings and sequential counters for each BPMN2 element type.
+	// Map of ID strings and sequential counters for each BPMN2 element description.
 	public static HashMap<String, Integer> defaultIds = new HashMap<String, Integer>();
 
 	/**
@@ -41,8 +41,8 @@ public class ModelUtil {
 	}
 
 	/**
-	 * Construct the first part of the ID string using the BPMN2 element type name.
-	 * If the object is a DI element, concatenate the BPMN2 element type name.
+	 * Construct the first part of the ID string using the BPMN2 element description name.
+	 * If the object is a DI element, concatenate the BPMN2 element description name.
 	 * 
 	 * @param obj - the BPMN2 object
 	 * @return name string
@@ -73,7 +73,7 @@ public class ModelUtil {
 	/**
 	 * If an EObject has not yet been added to a Resource (e.g. during construction)
 	 * generate an ID string using a different strategy (basically same ID prefixed with an underscore).
-	 * The "defaultIds" table is used to track the next sequential ID value for a given element type.
+	 * The "defaultIds" table is used to track the next sequential ID value for a given element description.
 	 * 
 	 * @param obj - the BPMN2 object
 	 * @return the ID string

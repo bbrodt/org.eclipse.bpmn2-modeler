@@ -33,7 +33,7 @@ import org.eclipse.emf.ecore.xmi.impl.ElementHandlerImpl;
  */
 public class Bpmn2ModelerResourceFactoryImpl extends ResourceFactoryImpl {
     /**
-     * Creates an instance of the resource factory.
+     * Creates an instance of the resource eFactory.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated

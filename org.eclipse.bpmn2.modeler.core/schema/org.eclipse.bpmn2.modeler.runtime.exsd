@@ -19,7 +19,7 @@
       <complexType>
          <choice minOccurs="1" maxOccurs="unbounded">
             <element ref="runtime"/>
-            <element ref="emfResourceFactory"/>
+            <element ref="model"/>
             <element ref="propertyTab"/>
             <element ref="propertySection"/>
             <element ref="customTask"/>
@@ -94,7 +94,7 @@
       </complexType>
    </element>
 
-   <element name="emfResourceFactory">
+   <element name="model">
       <annotation>
          <documentation>
             Custom EMF Resource Factory based on the org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl class. This provides runtime-specific hooks for model serialization, proxy resolution, object customization, etc.
@@ -108,10 +108,17 @@
                </documentation>
             </annotation>
          </attribute>
-         <attribute name="class" type="string" use="required">
+         <attribute name="uri" type="string">
             <annotation>
                <documentation>
-                  ResourceFactory class.
+                  The namespace URI of the registered model EPackage.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="resourceFactory" type="string" use="required">
+            <annotation>
+               <documentation>
+                  ResourceFactory class for this model.
                </documentation>
                <appinfo>
                   <meta.attribute kind="java" basedOn="org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl:"/>
@@ -264,7 +271,15 @@
    </element>
 
    <element name="customTask">
+      <annotation>
+         <documentation>
+            Defines a Custom Task contributed by a third party runtime vendor. A Custom Task is typically backed by a business object model (e.g. EMF), identified by &quot;type&quot;.
+         </documentation>
+      </annotation>
       <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="property"/>
+         </choice>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
@@ -275,7 +290,7 @@
          <attribute name="runtimeId" type="string" use="required">
             <annotation>
                <documentation>
-                  Identifies one of the previously defined runtime elements for which this section will be displayed.
+                  Identifies one of the previously defined runtime elements in which this Custom Task is defined.
                </documentation>
             </annotation>
          </attribute>
@@ -283,6 +298,13 @@
             <annotation>
                <documentation>
                   Descriptive name for this Custom Task. This will be displayed in the Tool Palette.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="type" type="string">
+            <annotation>
+               <documentation>
+                  Identifies the business object model type. If the business object model is persisted as an EMF resource, this corresponds to the EMF EClass of the object representing this Custom Task.
                </documentation>
             </annotation>
          </attribute>
@@ -294,6 +316,67 @@
                <appinfo>
                   <meta.attribute kind="java" basedOn="org.eclipse.bpmn2.modeler.ui.features.activity.task.CustomTaskFeatureContainer:"/>
                </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  Description used in dialogs and tooltips.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="property">
+      <annotation>
+         <documentation>
+            Describes some property of the Custom Task. This may be either
+         </documentation>
+      </annotation>
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="value"/>
+         </choice>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The property name. If the property is mapped to an EMF model, this should correspond to an attribute name of the Custom Task type.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="value" type="string">
+            <annotation>
+               <documentation>
+                  Default value for the property.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string">
+            <annotation>
+               <documentation>
+                  Description used in dialogs and tooltips.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="value">
+      <annotation>
+         <documentation>
+            If a property type is complex then this will contain a list of the complex type&apos;s values. If multiple values are given the property is assumed to be a list of complex types.
+         </documentation>
+      </annotation>
+      <complexType>
+         <choice minOccurs="0" maxOccurs="unbounded">
+            <element ref="property"/>
+         </choice>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
             </annotation>
          </attribute>
       </complexType>

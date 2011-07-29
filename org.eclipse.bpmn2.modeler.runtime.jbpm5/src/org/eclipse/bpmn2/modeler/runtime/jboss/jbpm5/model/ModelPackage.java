@@ -21,7 +21,7 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>each class,</li>
  *   <li>each feature of each class,</li>
  *   <li>each enum,</li>
- *   <li>and each data type</li>
+ *   <li>and each data description</li>
  * </ul>
  * <!-- end-user-doc -->
  * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.ModelFactory
@@ -397,296 +397,6 @@ public interface ModelPackage extends EPackage {
 	int PARAMETER_FEATURE_COUNT = 3;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.impl.LogTaskImpl <em>Log Task</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.impl.LogTaskImpl
-	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.impl.ModelPackageImpl#getLogTask()
-	 * @generated
-	 */
-	int LOG_TASK = 2;
-
-	/**
-	 * The feature id for the '<em><b>Extension Values</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__EXTENSION_VALUES = JBPM5_CUSTOM_TASK__EXTENSION_VALUES;
-
-	/**
-	 * The feature id for the '<em><b>Documentation</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__DOCUMENTATION = JBPM5_CUSTOM_TASK__DOCUMENTATION;
-
-	/**
-	 * The feature id for the '<em><b>Extension Definitions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__EXTENSION_DEFINITIONS = JBPM5_CUSTOM_TASK__EXTENSION_DEFINITIONS;
-
-	/**
-	 * The feature id for the '<em><b>Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__ID = JBPM5_CUSTOM_TASK__ID;
-
-	/**
-	 * The feature id for the '<em><b>Any Attribute</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__ANY_ATTRIBUTE = JBPM5_CUSTOM_TASK__ANY_ATTRIBUTE;
-
-	/**
-	 * The feature id for the '<em><b>Auditing</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__AUDITING = JBPM5_CUSTOM_TASK__AUDITING;
-
-	/**
-	 * The feature id for the '<em><b>Monitoring</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__MONITORING = JBPM5_CUSTOM_TASK__MONITORING;
-
-	/**
-	 * The feature id for the '<em><b>Category Value Ref</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__CATEGORY_VALUE_REF = JBPM5_CUSTOM_TASK__CATEGORY_VALUE_REF;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__NAME = JBPM5_CUSTOM_TASK__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Incoming</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__INCOMING = JBPM5_CUSTOM_TASK__INCOMING;
-
-	/**
-	 * The feature id for the '<em><b>Lanes</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__LANES = JBPM5_CUSTOM_TASK__LANES;
-
-	/**
-	 * The feature id for the '<em><b>Outgoing</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__OUTGOING = JBPM5_CUSTOM_TASK__OUTGOING;
-
-	/**
-	 * The feature id for the '<em><b>Io Specification</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__IO_SPECIFICATION = JBPM5_CUSTOM_TASK__IO_SPECIFICATION;
-
-	/**
-	 * The feature id for the '<em><b>Boundary Event Refs</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__BOUNDARY_EVENT_REFS = JBPM5_CUSTOM_TASK__BOUNDARY_EVENT_REFS;
-
-	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__PROPERTIES = JBPM5_CUSTOM_TASK__PROPERTIES;
-
-	/**
-	 * The feature id for the '<em><b>Data Input Associations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__DATA_INPUT_ASSOCIATIONS = JBPM5_CUSTOM_TASK__DATA_INPUT_ASSOCIATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Data Output Associations</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__DATA_OUTPUT_ASSOCIATIONS = JBPM5_CUSTOM_TASK__DATA_OUTPUT_ASSOCIATIONS;
-
-	/**
-	 * The feature id for the '<em><b>Resources</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__RESOURCES = JBPM5_CUSTOM_TASK__RESOURCES;
-
-	/**
-	 * The feature id for the '<em><b>Loop Characteristics</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__LOOP_CHARACTERISTICS = JBPM5_CUSTOM_TASK__LOOP_CHARACTERISTICS;
-
-	/**
-	 * The feature id for the '<em><b>Completion Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__COMPLETION_QUANTITY = JBPM5_CUSTOM_TASK__COMPLETION_QUANTITY;
-
-	/**
-	 * The feature id for the '<em><b>Default</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__DEFAULT = JBPM5_CUSTOM_TASK__DEFAULT;
-
-	/**
-	 * The feature id for the '<em><b>Is For Compensation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__IS_FOR_COMPENSATION = JBPM5_CUSTOM_TASK__IS_FOR_COMPENSATION;
-
-	/**
-	 * The feature id for the '<em><b>Start Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__START_QUANTITY = JBPM5_CUSTOM_TASK__START_QUANTITY;
-
-	/**
-	 * The feature id for the '<em><b>Incoming Conversation Links</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__INCOMING_CONVERSATION_LINKS = JBPM5_CUSTOM_TASK__INCOMING_CONVERSATION_LINKS;
-
-	/**
-	 * The feature id for the '<em><b>Outgoing Conversation Links</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__OUTGOING_CONVERSATION_LINKS = JBPM5_CUSTOM_TASK__OUTGOING_CONVERSATION_LINKS;
-
-	/**
-	 * The feature id for the '<em><b>Task Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__TASK_NAME = JBPM5_CUSTOM_TASK__TASK_NAME;
-
-	/**
-	 * The feature id for the '<em><b>Display Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__DISPLAY_NAME = JBPM5_CUSTOM_TASK__DISPLAY_NAME;
-
-	/**
-	 * The feature id for the '<em><b>Icon</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__ICON = JBPM5_CUSTOM_TASK__ICON;
-
-	/**
-	 * The feature id for the '<em><b>Parameters</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__PARAMETERS = JBPM5_CUSTOM_TASK__PARAMETERS;
-
-	/**
-	 * The feature id for the '<em><b>Results</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK__RESULTS = JBPM5_CUSTOM_TASK__RESULTS;
-
-	/**
-	 * The number of structural features of the '<em>Log Task</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOG_TASK_FEATURE_COUNT = JBPM5_CUSTOM_TASK_FEATURE_COUNT + 0;
-
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask <em>JBPM5 Custom Task</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -795,16 +505,6 @@ public interface ModelPackage extends EPackage {
 	EAttribute getParameter_Value();
 
 	/**
-	 * Returns the meta object for class '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.LogTask <em>Log Task</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Log Task</em>'.
-	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.LogTask
-	 * @generated
-	 */
-	EClass getLogTask();
-
-	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -820,7 +520,7 @@ public interface ModelPackage extends EPackage {
 	 *   <li>each class,</li>
 	 *   <li>each feature of each class,</li>
 	 *   <li>each enum,</li>
-	 *   <li>and each data type</li>
+	 *   <li>and each data description</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -909,16 +609,6 @@ public interface ModelPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PARAMETER__VALUE = eINSTANCE.getParameter_Value();
-
-		/**
-		 * The meta object literal for the '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.impl.LogTaskImpl <em>Log Task</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.impl.LogTaskImpl
-		 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.impl.ModelPackageImpl#getLogTask()
-		 * @generated
-		 */
-		EClass LOG_TASK = eINSTANCE.getLogTask();
 
 	}
 

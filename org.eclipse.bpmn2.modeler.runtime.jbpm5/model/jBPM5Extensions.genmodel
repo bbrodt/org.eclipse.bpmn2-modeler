@@ -3,7 +3,7 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5/src"
     modelPluginID="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model" redirection=""
-    modelName="JBPM5Extensions" modelPluginClass="" importerID="org.eclipse.emf.importer.ecore"
+    forceOverwrite="true" modelName="JBPM5Extensions" modelPluginClass="" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../org.eclipse.bpmn2/model/BPMN20.genmodel#//bpmn2 ../../org.eclipse.bpmn2/model/BPMN20.genmodel#//di ../../org.eclipse.bpmn2/model/BPMN20.genmodel#//di.1 ../../org.eclipse.bpmn2/model/BPMN20.genmodel#//dc">
   <foreignModel>jBPM5Extensions.ecore</foreignModel>
   <genPackages prefix="Model" basePackage="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5"
@@ -20,6 +20,5 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute jBPM5Extensions.ecore#//Parameter/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute jBPM5Extensions.ecore#//Parameter/value"/>
     </genClasses>
-    <genClasses ecoreClass="jBPM5Extensions.ecore#//LogTask"/>
   </genPackages>
 </genmodel:GenModel>

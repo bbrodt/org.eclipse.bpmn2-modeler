@@ -20,7 +20,7 @@ import org.eclipse.bpmn2.modeler.core.features.activity.ActivitySelectionBehavio
 import org.eclipse.bpmn2.modeler.core.features.activity.task.extension.ICustomTaskEditor;
 import org.eclipse.bpmn2.modeler.core.features.event.EventSelectionBehavior;
 import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTask;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor;
 import org.eclipse.bpmn2.modeler.core.preferences.ToolEnablementPreferences;
 import org.eclipse.bpmn2.modeler.ui.FeatureMap;
 import org.eclipse.bpmn2.modeler.ui.editor.BPMN2Editor;
@@ -184,16 +184,12 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 	}
 
 	private void createCustomTasks(List<IPaletteCompartmentEntry> ret, IFeatureProvider featureProvider) {
-		PaletteCompartmentEntry compartmentEntry;
+		PaletteCompartmentEntry compartmentEntry = null;
 		BPMN2Editor editor = (BPMN2Editor) getDiagramTypeProvider().getDiagramEditor();
 		TargetRuntime rt = editor.getTargetRuntime();
 		
-		compartmentEntry = new PaletteCompartmentEntry("Custom Task", null);
-		compartmentEntry.setInitiallyOpen(false);
-		ret.add(compartmentEntry);
-
 		try {
-			for (CustomTask tc : rt.getCustomTasks()) {
+			for (CustomTaskDescriptor tc : rt.getCustomTasks()) {
 				
 				CustomTaskFeatureContainer container = (CustomTaskFeatureContainer)tc.getCreateFeature();
 
@@ -201,6 +197,13 @@ public class BpmnToolBehaviourFeature extends DefaultToolBehaviorProvider implem
 				ICreateFeature cf = container.getCreateFeature(featureProvider);
 				ObjectCreationToolEntry objectCreationToolEntry = new ObjectCreationToolEntry(tc.getName(),
 						cf.getCreateDescription(), cf.getCreateImageId(), cf.getCreateLargeImageId(), cf);
+				
+				if (compartmentEntry==null) {
+					compartmentEntry = new PaletteCompartmentEntry("Custom Task", null);
+					compartmentEntry.setInitiallyOpen(false);
+					ret.add(compartmentEntry);
+				}
+				
 				compartmentEntry.addToolEntry(objectCreationToolEntry);
 
 			}

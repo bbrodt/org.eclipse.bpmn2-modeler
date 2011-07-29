@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.bpmn2.modeler.core.features.ConnectionFeatureContainer;
 import org.eclipse.bpmn2.modeler.core.features.DefaultBpmnDeleteFeature;
 import org.eclipse.bpmn2.modeler.core.features.FeatureContainer;
+import org.eclipse.bpmn2.modeler.core.features.activity.task.ICustomTaskFeature;
 import org.eclipse.bpmn2.modeler.core.features.bendpoint.AddBendpointFeature;
 import org.eclipse.bpmn2.modeler.core.features.bendpoint.MoveBendpointFeature;
 import org.eclipse.bpmn2.modeler.core.features.bendpoint.RemoveBendpointFeature;
@@ -182,11 +183,11 @@ public class BPMNFeatureProvider extends DefaultFeatureProvider {
 		boolean canAdd = true;
 		
 		if (fc instanceof CustomTaskFeatureContainer) {
-			CustomTaskFeatureContainer ctfc = (CustomTaskFeatureContainer)fc;
+			ICustomTaskFeature ctfc = (ICustomTaskFeature)fc;
 			for (FeatureContainer container : containers) {
 				if (container instanceof CustomTaskFeatureContainer) {
 					// don't add duplicates
-					String oldId = ((CustomTaskFeatureContainer)container).getId();
+					String oldId = ((ICustomTaskFeature)container).getId();
 					String newId = ctfc.getId();
 					if (oldId!=null && newId!=null) {
 						if (oldId.equals(newId)) {

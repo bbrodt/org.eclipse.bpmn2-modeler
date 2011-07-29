@@ -87,10 +87,6 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 				return createParameterAdapter();
 			}
 			@Override
-			public Adapter caseLogTask(LogTask object) {
-				return createLogTaskAdapter();
-			}
-			@Override
 			public Adapter caseBaseElement(BaseElement object) {
 				return createBaseElementAdapter();
 			}
@@ -159,20 +155,6 @@ public class ModelAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createParameterAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.LogTask <em>Log Task</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.LogTask
-	 * @generated
-	 */
-	public Adapter createLogTaskAdapter() {
 		return null;
 	}
 

@@ -1,9 +1,18 @@
 package org.eclipse.bpmn2.modeler.ui.features.activity.task;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.bpmn2.BaseElement;
+import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.impl.TaskImpl;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.AbstractCreateTaskFeature;
+import org.eclipse.bpmn2.modeler.core.features.activity.task.ICustomTaskFeature;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor;
+import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.ModelDescriptor;
 import org.eclipse.bpmn2.modeler.ui.diagram.BPMNFeatureProvider;
+import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
 import org.eclipse.graphiti.features.context.IAddContext;
 import org.eclipse.graphiti.features.context.IAreaContext;
@@ -13,11 +22,20 @@ import org.eclipse.graphiti.features.context.IPictogramElementContext;
 import org.eclipse.graphiti.features.context.impl.AddContext;
 import org.eclipse.graphiti.mm.pictograms.PictogramElement;
 import org.eclipse.graphiti.services.Graphiti;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
-public class CustomTaskFeatureContainer extends TaskFeatureContainer {
+public class CustomTaskFeatureContainer extends TaskFeatureContainer implements ICustomTaskFeature {
 	
-	public final static String CUSTOM_TASK_ID = "custom.task.id";
 	protected String id;
+	protected CustomTaskDescriptor customTaskDescriptor;
 	
 	/* (non-Javadoc)
 	 * Determine if the context applies to this task and return the Task object. Return null otherwise.
@@ -41,6 +59,14 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer {
 		return b1 || b2;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.eclipse.bpmn2.modeler.core.features.activity.task.ICustomTaskFeature#setId(java.lang.String)
+	 */
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	/**
 	 * Set this task's ID in the given Graphiti context.
 	 * 
@@ -113,13 +139,25 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer {
 			throw new Exception("The Feature Provider is invalid (not a BPMNFeatureProvider)");
 	}
 	
-	/**
-	 * Return this task's ID string.
-	 * 
-	 * @return - task ID string.
+	/* (non-Javadoc)
+	 * @see org.eclipse.bpmn2.modeler.ui.features.activity.task.ICustomTaskFeatureContainer#getId()
 	 */
+	@Override
 	public String getId() {
 		return id;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.bpmn2.modeler.ui.features.activity.task.ICustomTaskFeatureContainer#setCustomTaskDescriptor(org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor)
+	 */
+	@Override
+	public void setCustomTaskDescriptor(CustomTaskDescriptor customTaskDescriptor) {
+		this.customTaskDescriptor = customTaskDescriptor;
+	}
+	
+	@Override
+	public ICreateFeature getCreateFeature(IFeatureProvider fp) {
+		return new CreateCustomTaskFeature(fp);
 	}
 
 	/**
@@ -133,10 +171,14 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer {
 	 * PictogramElement. This is necessary because the ID must be associated with the
 	 * PE in to allow our BPMNFeatureProvider to correctly identify the Custom Task.
 	 */
-	public abstract class CreateCustomTaskFeature extends AbstractCreateTaskFeature {
+	public class CreateCustomTaskFeature extends AbstractCreateTaskFeature {
 
 		public CreateCustomTaskFeature(IFeatureProvider fp, String name, String description) {
 			super(fp, name, description);
+		}
+
+		public CreateCustomTaskFeature(IFeatureProvider fp) {
+			super(fp, customTaskDescriptor.getName(), customTaskDescriptor.getDescription());
 		}
 
 		@Override
@@ -158,6 +200,57 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer {
 			// copy our ID into the CreateContext - this is where it all starts!
 			setId(context, id);
 			return super.canCreate(context);
+		}
+
+		@Override
+		protected Task createFlowElement(ICreateContext context) {
+			TargetRuntime rt = customTaskDescriptor.getRuntime();
+			ModelDescriptor md = rt.getModelDescriptor(); 
+			EFactory factory = md.getEFactory();
+			EPackage pkg = md.getEPackage();
+			EClass eClass = (EClass) pkg.getEClassifier(customTaskDescriptor.getType());
+			EObject eObj = factory.create(eClass);
+
+			populateObject(factory, eObj,customTaskDescriptor.getProperties());
+			
+			return (Task)eObj;
+		}
+		
+		private void populateObject(EFactory factory, EObject eObj, List<CustomTaskDescriptor.Property> props) {
+			
+			for (CustomTaskDescriptor.Property prop : props) {
+				EStructuralFeature feature = eObj.eClass().getEStructuralFeature(prop.name);
+				if (feature instanceof EAttribute) {
+					eObj.eSet(feature, CustomTaskDescriptor.getStringValue(prop));
+				}
+				else if (feature instanceof EReference) {
+					EReference ref = (EReference)feature;
+					for (Object o : prop.getValues()) {
+						if (o instanceof CustomTaskDescriptor.Value) {
+							List<CustomTaskDescriptor.Property> props2 = new ArrayList<CustomTaskDescriptor.Property>();
+							CustomTaskDescriptor.Value val = (CustomTaskDescriptor.Value)o;
+							for (Object o2 : val.getValues()) {
+								props2.add((CustomTaskDescriptor.Property)o2);
+							}
+							EObject eObj2 = factory.create(ref.getEReferenceType());
+							populateObject(factory,eObj2,props2);
+							if (feature.isMany()) {
+								((EList)eObj.eGet(feature)).add(eObj2);
+							}
+							else {
+								eObj.eSet(feature, eObj2);
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		@Override
+		protected String getStencilImageId() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 		
 	}
