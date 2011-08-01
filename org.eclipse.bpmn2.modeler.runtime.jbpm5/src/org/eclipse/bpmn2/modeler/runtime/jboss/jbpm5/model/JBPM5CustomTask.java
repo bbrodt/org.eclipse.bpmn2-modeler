@@ -110,7 +110,7 @@ public interface JBPM5CustomTask extends Task {
 	void setIcon(String value);
 
 	/**
-	 * Returns the value of the '<em><b>Parameters</b></em>' reference list.
+	 * Returns the value of the '<em><b>Parameters</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.Parameter}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -118,15 +118,15 @@ public interface JBPM5CustomTask extends Task {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Parameters</em>' reference list.
+	 * @return the value of the '<em>Parameters</em>' containment reference list.
 	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.ModelPackage#getJBPM5CustomTask_Parameters()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<Parameter> getParameters();
 
 	/**
-	 * Returns the value of the '<em><b>Results</b></em>' reference list.
+	 * Returns the value of the '<em><b>Results</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.Parameter}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -134,9 +134,9 @@ public interface JBPM5CustomTask extends Task {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Results</em>' reference list.
+	 * @return the value of the '<em>Results</em>' containment reference list.
 	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.ModelPackage#getJBPM5CustomTask_Results()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<Parameter> getResults();

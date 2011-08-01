@@ -1,6 +1,6 @@
 package org.eclipse.bpmn2.modeler.core.features.activity.task;
 
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor;
+import org.eclipse.bpmn2.modeler.core.runtime.CustomTaskDescriptor;
 import org.eclipse.graphiti.features.IFeatureProvider;
 
 public interface ICustomTaskFeature {

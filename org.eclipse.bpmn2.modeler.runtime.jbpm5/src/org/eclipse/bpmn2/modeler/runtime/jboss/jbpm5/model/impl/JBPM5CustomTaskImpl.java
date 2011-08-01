@@ -16,12 +16,16 @@ import org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.Parameter;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -103,7 +107,7 @@ public class JBPM5CustomTaskImpl extends TaskImpl implements JBPM5CustomTask {
 	protected String icon = ICON_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' reference list.
+	 * The cached value of the '{@link #getParameters() <em>Parameters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getParameters()
@@ -113,7 +117,7 @@ public class JBPM5CustomTaskImpl extends TaskImpl implements JBPM5CustomTask {
 	protected EList<Parameter> parameters;
 
 	/**
-	 * The cached value of the '{@link #getResults() <em>Results</em>}' reference list.
+	 * The cached value of the '{@link #getResults() <em>Results</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getResults()
@@ -211,7 +215,7 @@ public class JBPM5CustomTaskImpl extends TaskImpl implements JBPM5CustomTask {
 	 */
 	public EList<Parameter> getParameters() {
 		if (parameters == null) {
-			parameters = new EObjectResolvingEList<Parameter>(Parameter.class, this, ModelPackage.JBPM5_CUSTOM_TASK__PARAMETERS);
+			parameters = new EObjectContainmentEList<Parameter>(Parameter.class, this, ModelPackage.JBPM5_CUSTOM_TASK__PARAMETERS);
 		}
 		return parameters;
 	}
@@ -223,9 +227,25 @@ public class JBPM5CustomTaskImpl extends TaskImpl implements JBPM5CustomTask {
 	 */
 	public EList<Parameter> getResults() {
 		if (results == null) {
-			results = new EObjectResolvingEList<Parameter>(Parameter.class, this, ModelPackage.JBPM5_CUSTOM_TASK__RESULTS);
+			results = new EObjectContainmentEList<Parameter>(Parameter.class, this, ModelPackage.JBPM5_CUSTOM_TASK__RESULTS);
 		}
 		return results;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case ModelPackage.JBPM5_CUSTOM_TASK__PARAMETERS:
+				return ((InternalEList<?>)getParameters()).basicRemove(otherEnd, msgs);
+			case ModelPackage.JBPM5_CUSTOM_TASK__RESULTS:
+				return ((InternalEList<?>)getResults()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

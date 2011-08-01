@@ -31,6 +31,7 @@ Export-Package: org.eclipse.bpmn2.modeler.core,
  org.eclipse.bpmn2.modeler.core.features.participant,
  org.eclipse.bpmn2.modeler.core.model,
  org.eclipse.bpmn2.modeler.core.preferences,
+ org.eclipse.bpmn2.modeler.core.runtime,
  org.eclipse.bpmn2.modeler.core.utils
 Import-Package: org.eclipse.graphiti.ui.features,
  org.eclipse.jface.viewers,

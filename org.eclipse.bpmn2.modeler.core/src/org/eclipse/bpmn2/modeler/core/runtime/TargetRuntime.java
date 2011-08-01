@@ -1,39 +1,21 @@
-package org.eclipse.bpmn2.modeler.core.preferences;
+package org.eclipse.bpmn2.modeler.core.runtime;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.bpmn2.modeler.core.AbstractPropertyChangeListenerProvider;
 import org.eclipse.bpmn2.modeler.core.Activator;
 import org.eclipse.bpmn2.modeler.core.IBpmn2RuntimeExtension;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.ICustomTaskFeature;
 import org.eclipse.bpmn2.modeler.core.model.Bpmn2ModelerResourceImpl;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor.Property;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor.Value;
-import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.bpmn2.modeler.core.runtime.CustomTaskDescriptor.Property;
+import org.eclipse.bpmn2.modeler.core.runtime.CustomTaskDescriptor.Value;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.ecore.EFactory;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.impl.EFactoryImpl;
-import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.gef.EditPart;
-import org.eclipse.graphiti.mm.pictograms.PictogramElement;
-import org.eclipse.jface.viewers.IFilter;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.AbstractPropertySection;
-import org.eclipse.ui.views.properties.tabbed.AbstractSectionDescriptor;
-import org.eclipse.ui.views.properties.tabbed.AbstractTabDescriptor;
-import org.eclipse.ui.views.properties.tabbed.ISection;
-import org.eclipse.ui.views.properties.tabbed.TabContents;
 
 
 public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
@@ -49,7 +31,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	protected String[] versions;
 	protected String id;
 	protected String description;
-	protected IBpmn2RuntimeExtension runtimeExtension;
+	private IBpmn2RuntimeExtension runtimeExtension;
 	protected ModelDescriptor modelDescriptor;
 	protected ArrayList<Bpmn2TabDescriptor> tabDescriptors;
 	protected ArrayList<Bpmn2SectionDescriptor> sectionDescriptors;
@@ -78,7 +60,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	
 	public void setResourceSet(ResourceSet resourceSet) {
 		resourceSet.getResourceFactoryRegistry().getContentTypeToFactoryMap().put(
-				Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID, modelDescriptor.resourceFactory);
+				Bpmn2ModelerResourceImpl.BPMN2_CONTENT_TYPE_ID, modelDescriptor.getResourceFactory());
 	}
 	
 	public static TargetRuntime[] getAllRuntimes() {
@@ -98,7 +80,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 						String description = e.getAttribute("description");
 						TargetRuntime rt = new TargetRuntime(id,name,versions,description);
 						
-						rt.runtimeExtension = (IBpmn2RuntimeExtension) e.createExecutableExtension("class");
+						rt.setRuntimeExtension((IBpmn2RuntimeExtension) e.createExecutableExtension("class"));
 					
 						rtList.add(rt);
 					}
@@ -114,11 +96,11 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 							ModelDescriptor md = new ModelDescriptor();
 							if (e.getAttribute("uri")!=null) {
 								String uri = e.getAttribute("uri");
-								md.ePackage = EPackage.Registry.INSTANCE.getEPackage(uri);
-								md.eFactory = md.ePackage.getEFactoryInstance();
+								md.setEPackage(EPackage.Registry.INSTANCE.getEPackage(uri));
+								md.setEFactory(md.getEPackage().getEFactoryInstance());
 							}
 							if (e.getAttribute("resourceFactory")!=null)
-								md.resourceFactory = (ResourceFactoryImpl) e.createExecutableExtension("resourceFactory");
+								md.setResourceFactory((ResourceFactoryImpl) e.createExecutableExtension("resourceFactory"));
 							rt.setModelDescriptor(md);
 						}
 						else if (e.getName().equals("propertyTab")) {
@@ -254,7 +236,7 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	}
 	
 	public void setModelDescriptor(ModelDescriptor md) {
-		md.targetRuntime = this;
+		md.setRuntime(this);
 		this.modelDescriptor = md;
 	}
 	
@@ -279,8 +261,8 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 	}
 	
 	public void addCustomTask(CustomTaskDescriptor ct) {
+		ct.setRuntime(this);
 		getCustomTasks().add(ct);
-		ct.targetRuntime = this;
 	}
 	
 	private static void addAfterTab(ArrayList<Bpmn2TabDescriptor> list, Bpmn2TabDescriptor tab) {
@@ -363,342 +345,12 @@ public class TargetRuntime extends AbstractPropertyChangeListenerProvider {
 		
 		return list;
 	}
-	
-	public static class BaseRuntimeDescriptor {
-		
-		protected TargetRuntime targetRuntime;
-		
-		public TargetRuntime getRuntime() {
-			return targetRuntime;
-		}
+
+	public IBpmn2RuntimeExtension getRuntimeExtension() {
+		return runtimeExtension;
 	}
-	
-	public static class ModelDescriptor extends BaseRuntimeDescriptor {
-		
-		protected EPackage ePackage;
-		protected EFactory eFactory;
-		protected ResourceFactoryImpl resourceFactory;
-		
-		public EFactory getEFactory() {
-			return eFactory;
-		}
-		
-		public ResourceFactoryImpl getResourceFactory() {
-			return resourceFactory;
-		}
-		
-		public EPackage getEPackage() {
-			return ePackage;
-		}
-	}
-	
-	public static class Bpmn2TabDescriptor extends AbstractTabDescriptor {
 
-		protected String id;
-		protected String category;
-		protected String label;
-		protected String afterTab = null;
-		protected boolean indented = false;
-		protected Image image = null;
-		protected ArrayList<Bpmn2SectionDescriptor> unfilteredSectionDescriptors = null;
-		
-		public Bpmn2TabDescriptor(String id, String category, String label) {
-			this.id = id;
-			this.category = category;
-			this.label = label;
-		}
-		
-		@Override
-		public String getCategory() {
-			return category;
-		}
-
-		@Override
-		public String getId() {
-			return id;
-		}
-
-		@Override
-		public String getLabel() {
-			return label;
-		}
-
-		@Override
-		public String getAfterTab() {
-			if (afterTab==null || afterTab.trim().length()==0)
-				return super.getAfterTab();
-			return afterTab;
-		}
-
-		@Override
-		public Image getImage() {
-			if (image==null)
-				return super.getImage();
-			return image;
-		}
-
-		@Override
-		public List getSectionDescriptors() {
-			if (unfilteredSectionDescriptors==null)
-				return super.getSectionDescriptors();
-			return unfilteredSectionDescriptors;
-		}
-
-		@Override
-		public TabContents createTab() {
-			// TODO Auto-generated method stub
-			return super.createTab();
-		}
-
-		@Override
-		public boolean isSelected() {
-			// TODO Auto-generated method stub
-			return super.isSelected();
-		}
-
-		@Override
-		public void setSectionDescriptors(List sectionDescriptors) {
-			// TODO Auto-generated method stub
-			super.setSectionDescriptors(sectionDescriptors);
-		}
-
-		@Override
-		public boolean isIndented() {
-			return indented;
-		}
-
-		@Override
-		public Object clone() {
-			Bpmn2TabDescriptor clone = new Bpmn2TabDescriptor(id, category, label);
-			clone.afterTab = this.afterTab;
-			clone.image = this.image;
-			clone.indented = this.indented;
-			return clone;
-		}
-		
-	}
-	
-	public static class Bpmn2SectionDescriptor extends AbstractSectionDescriptor {
-
-		protected String name;
-		protected String id;
-		protected String tab;
-		protected String label;
-		protected AbstractPropertySection sectionClass;
-		protected Class appliesToClass;
-		protected String enablesFor;
-		protected String filter;
-		protected String afterSection;
-		
-		public Bpmn2SectionDescriptor(String id, String tab, String label) {
-			this.id = id;
-			this.tab = tab;
-			this.label = label;
-		}
-		
-		@Override
-		public String getId() {
-			// TODO Auto-generated method stub
-			return id;
-		}
-
-		@Override
-		public ISection getSectionClass() {
-			return sectionClass;
-		}
-
-		@Override
-		public String getTargetTab() {
-			return tab;
-		}
-
-		@Override
-		public boolean appliesTo(IWorkbenchPart part, ISelection selection) {
-			
-			// should we delegate to the section to determine whether it should be included in this tab?
-			if (sectionClass instanceof IBpmn2PropertySection) {
-				return ((IBpmn2PropertySection)sectionClass).appliesTo(part, selection);
-			}
-			
-			// if an input description was specified, check if the selected business object is of this description. 
-			if (appliesToClass!=null && selection instanceof IStructuredSelection &&
-					((IStructuredSelection) selection).isEmpty()==false) {
-			
-				Object firstElement = ((IStructuredSelection) selection).getFirstElement();
-				EditPart editPart = null;
-				if (firstElement instanceof EditPart) {
-					editPart = (EditPart) firstElement;
-				} else if (firstElement instanceof IAdaptable) {
-					editPart = (EditPart) ((IAdaptable) firstElement).getAdapter(EditPart.class);
-				}
-				if (editPart != null && editPart.getModel() instanceof PictogramElement) {
-					PictogramElement pe = (PictogramElement) editPart.getModel();
-					// this is a special hack to allow selection of connection decorator labels:
-					// the connection decorator does not have a business object linked to it,
-					// but its parent (the connection) does.
-					if (pe.getLink()==null && pe.eContainer() instanceof PictogramElement)
-						pe = (PictogramElement)pe.eContainer();
-					if (pe.getLink()!=null) {
-						for (EObject eObj : pe.getLink().getBusinessObjects()){
-							if (appliesToClass.isInstance(eObj)) {
-								return true;
-							}
-						}
-					}
-				}
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public String getAfterSection() {
-			if (afterSection==null || afterSection.trim().length()==0)
-				return super.getAfterSection();
-			return afterSection;
-		}
-
-		@Override
-		public int getEnablesFor() {
-			try {
-				return Integer.parseInt(enablesFor);
-			}
-			catch (Exception ex) {
-				
-			}
-			return super.getEnablesFor();
-		}
-
-		@Override
-		public IFilter getFilter() {
-			// TODO Auto-generated method stub
-//			return super.getFilter();
-			return new IFilter() {
-
-				@Override
-				public boolean select(Object toTest) {
-					return false;
-				}
-				
-			};
-		}
-
-		@Override
-		public List getInputTypes() {
-			// TODO Auto-generated method stub
-			return super.getInputTypes();
-		}
-		
-	}
-	
-	public static class CustomTaskDescriptor extends BaseRuntimeDescriptor {
-
-
-		// Container class for property values
-		public static class Value {
-			
-			static int ID = 0;
-			String id;
-			public List<Object>values;
-			
-			public Value() {
-				setDefaultId();
-			}
-			
-			public Value(String id) {
-				if (id==null || id.isEmpty())
-					setDefaultId();
-				else
-					this.id = id;
-			}
-			
-			public List<Object> getValues() {
-				if (values==null) {
-					values = new ArrayList<Object>();
-				}
-				return values;
-			}
-			
-			private void setDefaultId() {
-				id = "V-" + ID++;
-			}
-		}
-		
-		public static class Property {
-			public String name;
-			public String description;
-			public List<Object>values;
-			
-			public Property() {
-				this.name = "unknown";
-			}
-			
-			public Property(String name, String description) {
-				this.name = name;
-				this.description = description;
-			}
-			
-			public List<Object> getValues() {
-				if (values==null) {
-					values = new ArrayList<Object>();
-				}
-				return values;
-			}
-		}
-		
-		protected String id;
-		protected String name;
-		protected String type;
-		protected String description;
-		protected ICustomTaskFeature createFeature;
-		protected List<Property> properties = new ArrayList<Property>();
-		
-		public CustomTaskDescriptor(String id, String name) {
-			this.id = id;
-			this.name = name;
-		}
-		
-		public String getId() {
-			return id;
-		}
-
-		public String getName() {
-			return name;
-		}
-		
-		public String getType() {
-			return type;
-		}
-		
-		public String getDescription() {
-			return description;
-		}
-
-		public ICustomTaskFeature getCreateFeature() {
-			return createFeature;
-		}
-		
-		public List<Property> getProperties() {
-			return properties;
-		}
-
-		public static String getStringValue(Property prop) {
-
-			if (!prop.getValues().isEmpty()) {
-				// simple attribute - find a String value for it
-				for (Object propValue : prop.getValues()) {
-					if (propValue instanceof String) {
-						return (String)propValue;
-					}
-					else if (propValue instanceof Property) {
-						String s = getStringValue((Property)propValue);
-						if (s!=null)
-							return s;
-					}
-				}
-			}
-			return null;
-		}
-		
+	public void setRuntimeExtension(IBpmn2RuntimeExtension runtimeExtension) {
+		this.runtimeExtension = runtimeExtension;
 	}
 }

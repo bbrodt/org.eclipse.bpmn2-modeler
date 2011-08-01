@@ -1,5 +1,6 @@
 package org.eclipse.bpmn2.modeler.core.preferences;
 
+import org.eclipse.bpmn2.modeler.core.runtime.TargetRuntime;
 import org.eclipse.core.internal.resources.ProjectPreferences;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -101,7 +102,7 @@ public class Bpmn2Preferences implements IPreferenceChangeListener {
 		
 		if (targetRuntime == TargetRuntime.getDefaultRuntime()) {
 			for (TargetRuntime rt : TargetRuntime.getAllRuntimes()) {
-				if (rt.runtimeExtension.isContentForRuntime(file)) {
+				if (rt.getRuntimeExtension().isContentForRuntime(file)) {
 					return rt;
 				}
 			}

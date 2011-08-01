@@ -8,9 +8,8 @@ import org.eclipse.bpmn2.Task;
 import org.eclipse.bpmn2.impl.TaskImpl;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.AbstractCreateTaskFeature;
 import org.eclipse.bpmn2.modeler.core.features.activity.task.ICustomTaskFeature;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.CustomTaskDescriptor;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime.ModelDescriptor;
+import org.eclipse.bpmn2.modeler.core.runtime.CustomTaskDescriptor;
+import org.eclipse.bpmn2.modeler.core.runtime.TargetRuntime;
 import org.eclipse.bpmn2.modeler.ui.diagram.BPMNFeatureProvider;
 import org.eclipse.graphiti.features.ICreateFeature;
 import org.eclipse.graphiti.features.IFeatureProvider;
@@ -31,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.common.util.URI;
 
 public class CustomTaskFeatureContainer extends TaskFeatureContainer implements ICustomTaskFeature {
 	
@@ -46,8 +46,9 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer implements 
 	@Override
 	public Object getApplyObject(IContext context) {
 		Object id = getId(context);
-		if (id==null || !this.id.equals(id))
+		if (id==null || !this.id.equals(id)) {
 			return null;
+		}
 
 		return super.getApplyObject(context);
 	}
@@ -204,47 +205,7 @@ public class CustomTaskFeatureContainer extends TaskFeatureContainer implements 
 
 		@Override
 		protected Task createFlowElement(ICreateContext context) {
-			TargetRuntime rt = customTaskDescriptor.getRuntime();
-			ModelDescriptor md = rt.getModelDescriptor(); 
-			EFactory factory = md.getEFactory();
-			EPackage pkg = md.getEPackage();
-			EClass eClass = (EClass) pkg.getEClassifier(customTaskDescriptor.getType());
-			EObject eObj = factory.create(eClass);
-
-			populateObject(factory, eObj,customTaskDescriptor.getProperties());
-			
-			return (Task)eObj;
-		}
-		
-		private void populateObject(EFactory factory, EObject eObj, List<CustomTaskDescriptor.Property> props) {
-			
-			for (CustomTaskDescriptor.Property prop : props) {
-				EStructuralFeature feature = eObj.eClass().getEStructuralFeature(prop.name);
-				if (feature instanceof EAttribute) {
-					eObj.eSet(feature, CustomTaskDescriptor.getStringValue(prop));
-				}
-				else if (feature instanceof EReference) {
-					EReference ref = (EReference)feature;
-					for (Object o : prop.getValues()) {
-						if (o instanceof CustomTaskDescriptor.Value) {
-							List<CustomTaskDescriptor.Property> props2 = new ArrayList<CustomTaskDescriptor.Property>();
-							CustomTaskDescriptor.Value val = (CustomTaskDescriptor.Value)o;
-							for (Object o2 : val.getValues()) {
-								props2.add((CustomTaskDescriptor.Property)o2);
-							}
-							EObject eObj2 = factory.create(ref.getEReferenceType());
-							populateObject(factory,eObj2,props2);
-							if (feature.isMany()) {
-								((EList)eObj.eGet(feature)).add(eObj2);
-							}
-							else {
-								eObj.eSet(feature, eObj2);
-								break;
-							}
-						}
-					}
-				}
-			}
+			return (Task)customTaskDescriptor.createObject();
 		}
 		
 		@Override

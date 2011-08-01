@@ -17,7 +17,7 @@ import org.eclipse.bpmn2.di.BPMNDiagram;
 import org.eclipse.bpmn2.di.impl.BPMNDiagramImpl;
 import org.eclipse.bpmn2.modeler.core.ModelHandlerLocator;
 import org.eclipse.bpmn2.modeler.core.features.BusinessObjectUtil;
-import org.eclipse.bpmn2.modeler.core.preferences.IBpmn2PropertySection;
+import org.eclipse.bpmn2.modeler.core.runtime.IBpmn2PropertySection;
 import org.eclipse.bpmn2.modeler.ui.Activator;
 import org.eclipse.bpmn2.modeler.ui.editor.BPMN2Editor;
 import org.eclipse.emf.ecore.EObject;

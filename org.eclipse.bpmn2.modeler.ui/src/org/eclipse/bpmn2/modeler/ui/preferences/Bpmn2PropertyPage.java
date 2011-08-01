@@ -1,7 +1,7 @@
 package org.eclipse.bpmn2.modeler.ui.preferences;
 
 import org.eclipse.bpmn2.modeler.core.preferences.Bpmn2Preferences;
-import org.eclipse.bpmn2.modeler.core.preferences.TargetRuntime;
+import org.eclipse.bpmn2.modeler.core.runtime.TargetRuntime;
 import org.eclipse.bpmn2.modeler.ui.Activator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;

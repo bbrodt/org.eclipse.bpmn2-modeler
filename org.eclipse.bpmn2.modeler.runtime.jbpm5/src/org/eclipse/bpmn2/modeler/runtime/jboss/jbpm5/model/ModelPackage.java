@@ -324,7 +324,7 @@ public interface ModelPackage extends EPackage {
 	int JBPM5_CUSTOM_TASK__ICON = Bpmn2Package.TASK_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Parameters</b></em>' reference list.
+	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -333,7 +333,7 @@ public interface ModelPackage extends EPackage {
 	int JBPM5_CUSTOM_TASK__PARAMETERS = Bpmn2Package.TASK_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Results</b></em>' reference list.
+	 * The feature id for the '<em><b>Results</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -440,10 +440,10 @@ public interface ModelPackage extends EPackage {
 	EAttribute getJBPM5CustomTask_Icon();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask#getParameters <em>Parameters</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask#getParameters <em>Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Parameters</em>'.
+	 * @return the meta object for the containment reference list '<em>Parameters</em>'.
 	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask#getParameters()
 	 * @see #getJBPM5CustomTask()
 	 * @generated
@@ -451,10 +451,10 @@ public interface ModelPackage extends EPackage {
 	EReference getJBPM5CustomTask_Parameters();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask#getResults <em>Results</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask#getResults <em>Results</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Results</em>'.
+	 * @return the meta object for the containment reference list '<em>Results</em>'.
 	 * @see org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5.model.JBPM5CustomTask#getResults()
 	 * @see #getJBPM5CustomTask()
 	 * @generated
@@ -561,7 +561,7 @@ public interface ModelPackage extends EPackage {
 		EAttribute JBPM5_CUSTOM_TASK__ICON = eINSTANCE.getJBPM5CustomTask_Icon();
 
 		/**
-		 * The meta object literal for the '<em><b>Parameters</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
@@ -569,7 +569,7 @@ public interface ModelPackage extends EPackage {
 		EReference JBPM5_CUSTOM_TASK__PARAMETERS = eINSTANCE.getJBPM5CustomTask_Parameters();
 
 		/**
-		 * The meta object literal for the '<em><b>Results</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Results</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
