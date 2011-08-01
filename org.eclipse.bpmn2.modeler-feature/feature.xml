@@ -34,7 +34,7 @@ Red Hat, Inc. - initial API and implementation
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.bpmn2.modeler.extras"
+         id="org.eclipse.bpmn2.modeler.runtime.jboss.jbpm5"
          download-size="0"
          install-size="0"
          version="0.0.0"
